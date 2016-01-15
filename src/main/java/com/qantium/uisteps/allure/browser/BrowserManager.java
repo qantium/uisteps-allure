@@ -11,7 +11,7 @@ public class BrowserManager extends com.qantium.uisteps.core.browser.BrowserMana
         setBrowserFactory(new BrowserFactory());
     }
 
-    @Step
+    @Step("Open {0}")
     @Override
     public com.qantium.uisteps.core.browser.Browser open(com.qantium.uisteps.core.browser.Browser browser) {
         return super.open(browser);
