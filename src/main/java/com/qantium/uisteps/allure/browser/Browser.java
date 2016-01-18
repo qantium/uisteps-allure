@@ -148,13 +148,13 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
     }
 
     @Override
-    @Step("Type into \"{0}\" value \"{1}\"")
+    @Step("Type into \"{0}\" value \"{1}\" META[type=action]")
     public void typeInto(WrapsElement input, String text) {
         super.typeInto(input, text);
     }
 
     @Override
-    @Step("Enter into \"{0}\" value \"{1}\"")
+    @Step("Enter into \"{0}\" value \"{1}\" META[type=action]")
     public void enterInto(WrapsElement input, String text) {
         super.enterInto(input, text);
     }
