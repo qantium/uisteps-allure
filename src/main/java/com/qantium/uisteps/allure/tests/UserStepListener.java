@@ -73,8 +73,6 @@ public class UserStepListener<U extends User> extends LifecycleListener {
         if(!StringUtils.isEmpty(lastStepTitle)) {
             lastStep.setTitle(new StepMeta(lastStepTitle).getStepTitleWithoutMeta());
         }
-
-        System.out.println("======================================= " + lastStep.getTitle());
     }
 
 
@@ -88,7 +86,6 @@ public class UserStepListener<U extends User> extends LifecycleListener {
             phase = Phase.STEP_FAILED;
         }
         attachInfo(phase);
-        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
     }
 
     protected void attachInfo(Phase phase) {
@@ -109,8 +106,6 @@ public class UserStepListener<U extends User> extends LifecycleListener {
     }
 
     protected boolean need(Attach attach, Phase phase) {
-
-        System.out.println("******************* " + needOn(phase, getProprety(attach)));
 
         if(!needOn(phase, getProprety(attach))) {
             return false;
@@ -160,17 +155,11 @@ public class UserStepListener<U extends User> extends LifecycleListener {
             return true;
         }
 
-        System.out.println("%%%%%%%%%%%%%%%% property " + property);
-
         boolean isAction = "action".equals((currentStepMetaParams.get("type")));
-        System.out.println("%%%%%%%%%%%%%%%% isAction " + isAction);
         boolean forAction = BEFORE_AND_AFTER_EACH_ACTION.equals(property) || BEFORE_EACH_ACTION.equals(property) || AFTER_EACH_ACTION.equals(property);
         boolean beforeAndAfter = BEFORE_AND_AFTER_EACH_STEP.equals(property) || BEFORE_AND_AFTER_EACH_ACTION.equals(property);
-        System.out.println("%%%%%%%%%%%%%%%% beforeAndAfter " + beforeAndAfter);
         boolean before = BEFORE_EACH_STEP.equals(property) || BEFORE_EACH_ACTION.equals(property);
-        System.out.println("%%%%%%%%%%%%%%%% before " + before);
         boolean after = AFTER_EACH_STEP.equals(property) || AFTER_EACH_ACTION.equals(property);
-        System.out.println("%%%%%%%%%%%%%%%% after " + after);
 
 
         if(phase == Phase.STEP_STARTED) {
@@ -185,11 +174,8 @@ public class UserStepListener<U extends User> extends LifecycleListener {
         }
 
         if(phase == Phase.STEP_FINISHED) {
-            System.out.println("#########################1 " + phase);
             if(after || beforeAndAfter) {
-                System.out.println("#########################2 " + phase);
                 if(!forAction) {
-                    System.out.println("#########################3 " + isAction);
                     return !isAction;
                 } else {
                     return true;
