@@ -7,6 +7,10 @@ import com.qantium.uisteps.core.browser.pages.elements.CheckBox;
 import com.qantium.uisteps.core.browser.pages.elements.FileInput;
 import com.qantium.uisteps.core.browser.pages.elements.RadioButtonGroup;
 import com.qantium.uisteps.core.browser.pages.elements.Select;
+import com.qantium.uisteps.core.browser.pages.elements.alert.Alert;
+import com.qantium.uisteps.core.browser.pages.elements.alert.AuthenticationAlert;
+import com.qantium.uisteps.core.browser.pages.elements.alert.ComfirmAlert;
+import com.qantium.uisteps.core.browser.pages.elements.alert.PromtAlert;
 import com.qantium.uisteps.core.screenshots.Ignored;
 import com.qantium.uisteps.core.screenshots.Photographer;
 import com.qantium.uisteps.core.screenshots.Screenshot;
@@ -169,6 +173,31 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
     @Override
     public void click(WrapsElement element) {
         super.click(element);
+    }
+
+    //Alert
+    @Step
+    @Override
+    public void accept(Alert alert) {
+        super.accept(alert);
+    }
+
+    @Step
+    @Override
+    public void dismiss(ComfirmAlert cofirm) {
+        super.dismiss(cofirm);
+    }
+
+    @Step("Enter into \"{0}\" text \"{1}\"")
+    @Override
+    public void enterInto(PromtAlert promt, String text) {
+        super.enterInto(promt, text);
+    }
+
+    @Step("Authenticate in \"{0}\" using login = \"{1}\" and password = \"{2}\"")
+    @Override
+    public void authenticateUsing(AuthenticationAlert authenticationAlert, String login, String password) {
+        super.authenticateUsing(authenticationAlert, login, password);
     }
 
     @Step
