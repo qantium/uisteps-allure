@@ -1,6 +1,7 @@
 package com.qantium.uisteps.allure.tests.listeners;
 
 import com.qantium.uisteps.allure.user.User;
+import com.qantium.uisteps.core.properties.UIStepsProperty;
 import com.qantium.uisteps.core.screenshots.Screenshot;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import ru.yandex.qatools.allure.annotations.Step;
@@ -14,7 +15,7 @@ public class TakeScreenshot extends UserFunction {
 
 
     public TakeScreenshot(User user) {
-        super(user, "screenshots.take");
+        super(user, UIStepsProperty.SCREENSHOTS_TAKE.toString());
     }
 
     @Override

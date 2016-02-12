@@ -1,6 +1,7 @@
 package com.qantium.uisteps.allure.tests.listeners;
 
 import com.qantium.uisteps.allure.user.User;
+import com.qantium.uisteps.core.properties.UIStepsProperty;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import ru.yandex.qatools.allure.annotations.Step;
 
@@ -10,7 +11,7 @@ import ru.yandex.qatools.allure.annotations.Step;
 public class TakePageSource extends UserFunction {
 
     public TakePageSource(User user) {
-        super(user, "source.take");
+        super(user, UIStepsProperty.SOURCE_TAKE.toString());
     }
 
     @Override

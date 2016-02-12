@@ -42,14 +42,6 @@ public class UserStepListener extends LifecycleListener {
         return this;
     }
 
-    public UserStepListener add(UserFunction function, String property) {
-
-        if(!"NEVER".equals(UIStepsProperties.getProperty(property).toUpperCase())) {
-            add(function);
-        }
-        return this;
-    }
-
     protected void execute(Event event) {
         if (!"false".equals(currentStepMetaParams.get("listen"))) {
 

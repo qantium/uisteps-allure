@@ -9,7 +9,18 @@ import com.qantium.uisteps.core.tests.BaseTest;
  */
 public class BaseAllureTest extends BaseTest {
 
-    public BaseAllureTest() {
-        super(new Verify(), new Assume(), new Storage());
+    @Override
+    protected Verify getAssertions() {
+        return new Verify();
+    }
+
+    @Override
+    protected Assume getAssumtions() {
+        return new Assume();
+    }
+
+    @Override
+    protected Storage getStorage() {
+        return new Storage();
     }
 }

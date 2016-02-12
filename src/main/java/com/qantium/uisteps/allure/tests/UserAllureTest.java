@@ -8,6 +8,6 @@ import com.qantium.uisteps.allure.user.User;
 public class UserAllureTest extends BaseUserAllureTest {
 
     public UserAllureTest() {
-        super(new User());
+        super(User.class);
     }
 }
