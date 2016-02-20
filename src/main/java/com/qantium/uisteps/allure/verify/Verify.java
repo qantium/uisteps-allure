@@ -12,7 +12,7 @@ public class Verify extends com.qantium.uisteps.core.verify.Verify {
 
     @Step("Verify result")
     @Override
-    public void result(Result result) {
+    public void check(Result result) {
         seeResult("see result", result.toString());
         Assert.assertTrue("Verification is failed", result.isSuccessful());
     }

@@ -11,11 +11,11 @@ public class Assume extends com.qantium.uisteps.core.verify.Assume {
 
     @Step("Assume result")
     @Override
-    public void result(Result result) {
+    public void check(Result result) {
         seeResult("see result", result);
 
         try {
-            super.result(result);
+            super.check(result);
         } catch (Exception ex) {
             throw new AssertionError();
         }
