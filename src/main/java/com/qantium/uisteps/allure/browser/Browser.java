@@ -50,12 +50,6 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
         super.refreshPage();
     }
 
-    @Step("On displayed \"{0}\"")
-    @Override
-    public <T extends UIObject> T onDisplayed(T uiObject) {
-        return super.onDisplayed(uiObject);
-    }
-
     //Navigation
     @Step
     @Override

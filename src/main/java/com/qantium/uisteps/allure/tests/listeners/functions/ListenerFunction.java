@@ -1,31 +1,29 @@
-package com.qantium.uisteps.allure.tests.listeners;
+package com.qantium.uisteps.allure.tests.listeners.functions;
 
-import com.qantium.uisteps.allure.user.User;
+import com.qantium.uisteps.allure.tests.listeners.Event;
+import com.qantium.uisteps.allure.tests.listeners.StepListener;
 import com.qantium.uisteps.core.properties.UIStepsProperties;
 import com.qantium.uisteps.core.tests.listeners.Execute;
-import org.apache.commons.lang.ArrayUtils;
 
 import java.util.*;
 
 /**
  * Created by Anton Solyankin
  */
-public abstract class UserFunction<E> {
+public abstract class ListenerFunction {
 
-    private final User user;
     private final Set<Event> events = new HashSet();
+    private StepListener listener ;
 
-    public UserFunction(User user, Event[] events) {
-        this.user = user;
+    public ListenerFunction(Event[] events) {
         this.events.addAll(Arrays.asList(events));
     }
 
-
-    public UserFunction(User user, String property) {
-        this.user = user;
-
+    public ListenerFunction(String property) {
         String[] executions = UIStepsProperties.getProperty(property).split(",");
+
         for (String execution : executions) {
+
             switch (Execute.valueOf(execution.trim().toUpperCase())) {
                 case BEFORE_AND_AFTER_EACH_STEP:
                     this.events.add(Event.STEP_STARTED);
@@ -40,17 +38,27 @@ public abstract class UserFunction<E> {
                 case FOR_FAILURES:
                     this.events.add(Event.STEP_FAILED);
                     break;
+                case TEST_STARTED:
+                    this.events.add(Event.TEST_STARTED);
+                    break;
+                case TEST_FINISHED:
+                    this.events.add(Event.TEST_FINISHED);
+                    break;
             }
         }
     }
 
-    public User getUser() {
-        return user;
+    public void setListener(StepListener listener) {
+        this.listener = listener;
+    }
+
+    public StepListener getListener() {
+        return listener;
     }
 
     public boolean needsOn(Event phase) {
         return events.contains(phase);
     }
 
-    public abstract E execute();
+    public abstract Object execute();
 }

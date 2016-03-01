@@ -1,9 +1,11 @@
 package com.qantium.uisteps.allure.tests;
 
 import com.qantium.uisteps.allure.storage.Storage;
-import com.qantium.uisteps.allure.tests.listeners.TakePageSource;
-import com.qantium.uisteps.allure.tests.listeners.TakeScreenshot;
-import com.qantium.uisteps.allure.tests.listeners.UserStepListener;
+import com.qantium.uisteps.allure.tests.listeners.functions.ClearTitles;
+import com.qantium.uisteps.allure.tests.listeners.functions.ReportTestRail;
+import com.qantium.uisteps.allure.tests.listeners.functions.TakePageSource;
+import com.qantium.uisteps.allure.tests.listeners.functions.TakeScreenshot;
+import com.qantium.uisteps.allure.tests.listeners.StepListener;
 import com.qantium.uisteps.allure.user.User;
 import com.qantium.uisteps.allure.verify.Assume;
 import com.qantium.uisteps.allure.verify.Verify;
@@ -17,12 +19,17 @@ public class BaseUserAllureTest<U extends User> extends BaseUserTest<U> {
 
     public BaseUserAllureTest(Class<U> user) {
         super(user);
-        UserStepListener listener = new UserStepListener(this.user);
+        initListeners();
+    }
 
-        TakeScreenshot takeScreenshot = new TakeScreenshot(this.user);
-        TakePageSource takePageSource = new TakePageSource(this.user);
+    protected void initListeners() {
+        StepListener listener = new StepListener();
 
-        listener.add(takeScreenshot).add(takePageSource);
+        listener
+                .add(new TakeScreenshot())
+                .add(new TakePageSource())
+                .add(new ReportTestRail())
+                .add(new ClearTitles());
 
         Allure.LIFECYCLE.addListener(listener);
     }
