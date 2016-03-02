@@ -1,12 +1,9 @@
 package com.qantium.uisteps.allure.tests.listeners.functions;
 
 import com.qantium.uisteps.allure.tests.listeners.Event;
-import com.qantium.uisteps.allure.tests.listeners.Meta;
-import com.qantium.uisteps.core.tests.MetaInfo;
 import com.qantium.uisteps.core.utils.testrail.TestRailAdapter;
 import com.qantium.uisteps.core.utils.testrail.TestRailEntity;
 import com.qantium.uisteps.core.utils.testrail.TestRailType;
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +11,9 @@ import ru.yandex.qatools.allure.model.Label;
 import ru.yandex.qatools.allure.model.Parameter;
 import ru.yandex.qatools.allure.model.Step;
 import ru.yandex.qatools.allure.model.TestCaseResult;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Anton Solyankin
@@ -29,33 +29,33 @@ public class ReportTestRail extends ListenerFunction {
     @Override
     public Object execute() {
         TestCaseResult testResult = getListener().getTest();
-
-        for (Label label : testResult.getLabels()) {
-            if("testId".equals(label.getName())) {
-
-                String caseId = label.getValue();
-                if (caseId.startsWith(TestRailType.CASE.mark)) {
-
-                    int status = getTestRailStatusCodeFor(testResult);
-                    JSONArray testsJSONArray = TestRailAdapter.getInstance().getData().getJSONArray("test");
-
-                    for(int i = 0; i < testsJSONArray.length(); i++) {
-
-                        try {
-                            JSONObject testJSON = testsJSONArray.getJSONObject(i);
-
-                            if(new TestRailEntity(caseId).getId() == testJSON.getInt("case_id")) {
-                                int testId = testJSON.getInt("id");
-                                testRailAdapter.addTestResult(testId, status);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-                break;
-            }
-        }
+//
+//        for (Label label : testResult.getLabels()) {
+//            if("testId".equals(label.getName())) {
+//
+//                String caseId = label.getValue();
+//                if (caseId.startsWith(TestRailType.CASE.mark)) {
+//
+//                    int status = getTestRailStatusCodeFor(testResult);
+//                    JSONArray testsJSONArray = TestRailAdapter.getInstance().getData().getJSONArray("test");
+//
+//                    for(int i = 0; i < testsJSONArray.length(); i++) {
+//
+//                        try {
+//                            JSONObject testJSON = testsJSONArray.getJSONObject(i);
+//
+//                            if(new TestRailEntity(caseId).getId() == testJSON.getInt("case_id")) {
+//                                int testId = testJSON.getInt("id");
+//                                testRailAdapter.addTestResult(testId, status);
+//                            }
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }
+//                break;
+//            }
+//        }
 
         System.out.println("##### " + testResult.getStart() + " " + testResult.getStop() + " " + testResult.getDescription() + " " + testResult.getFailure().getMessage() + testResult.getFailure().getMessage());
 
@@ -66,6 +66,8 @@ public class ReportTestRail extends ListenerFunction {
         for (Step step: getListener().getSteps()) {
             System.out.println("****" + " " + step.getTitle() + " " + step.getName());
         }
+
+        System.out.println(buildTestResultComment(testResult));
         return null;
     }
 
@@ -73,34 +75,45 @@ public class ReportTestRail extends ListenerFunction {
         StringBuffer comment = new StringBuffer();
         comment
                 .append("[INFO] ------------------------------------------------------------------------")
-                .append(appendLabelsToTestResultComment(testResult))
-                .append("-------------------------------------------------------------------------------");
+                .append("\n").append(getLabels(testResult))
+                .append("\n").append(getTimings(testResult))
+                .append("\n").append("-------------------------------------------------------------------------------");
         return comment.toString();
     }
 
-    private StringBuffer appendLabelsToTestResultComment(TestCaseResult testResult) {
-        StringBuffer comment = new StringBuffer();
+    private StringBuffer getLabels(TestCaseResult testResult) {
+        StringBuffer labels = new StringBuffer();
 
-        comment.append("Labels:\n");
+        labels.append("Labels:");
         for (Label label : testResult.getLabels()) {
-            comment
-                    .append("\u0009")
+            labels
+                    .append("\n\t")
                     .append(label.getName())
                     .append(": ")
                     .append(label.getValue());
         }
-        return comment.append("\n");
+        return labels;
     }
 
-    private void appendTimingsToTestResultComment(StringBuffer comment, TestCaseResult testResult) {
-        comment.append("Timings:\n");
-        for (Label label : testResult.getLabels()) {
-            comment.append(label.getName()).append(": ").append(label.getValue());
-        }
+    private StringBuffer getTimings(TestCaseResult testResult) {
+
+        StringBuffer timings = new StringBuffer();
+
+        long start = testResult.getStart();
+        long stop = testResult.getStop();
+        long total = stop - start;
+
+        timings
+                .append("Timings:")
+                .append("\n\tstart: ").append(new Date(start))
+                .append("\n\tstop: ").append(new Date(stop))
+                .append("\n\ttotal: ").append(new SimpleDateFormat("m'm 's's 'SSS'ms'").format(total));
+
+        return timings;
     }
 
     protected int getTestRailStatusCodeFor(TestCaseResult testResult) {
-        return testRailAdapter.getStatusCode(testResult.getStatus().name());cd
+        return testRailAdapter.getStatusCode(testResult.getStatus().name());
     }
 
     @Override
