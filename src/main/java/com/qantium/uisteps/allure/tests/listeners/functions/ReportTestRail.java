@@ -29,42 +29,36 @@ public class ReportTestRail extends ListenerFunction {
     @Override
     public Object execute() {
         TestCaseResult testResult = getListener().getTest();
-//
-//        for (Label label : testResult.getLabels()) {
-//            if("testId".equals(label.getName())) {
-//
-//                String caseId = label.getValue();
-//                if (caseId.startsWith(TestRailType.CASE.mark)) {
-//
-//                    int status = getTestRailStatusCodeFor(testResult);
-//                    JSONArray testsJSONArray = TestRailAdapter.getInstance().getData().getJSONArray("test");
-//
-//                    for(int i = 0; i < testsJSONArray.length(); i++) {
-//
-//                        try {
-//                            JSONObject testJSON = testsJSONArray.getJSONObject(i);
-//
-//                            if(new TestRailEntity(caseId).getId() == testJSON.getInt("case_id")) {
-//                                int testId = testJSON.getInt("id");
-//                                testRailAdapter.addTestResult(testId, status);
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-//                break;
-//            }
-//        }
 
-        System.out.println("##### " + testResult.getStart() + " " + testResult.getStop() + " " + testResult.getDescription() + " " + testResult.getFailure().getMessage() + testResult.getFailure().getMessage());
+        for (Label label : testResult.getLabels()) {
 
-        for (Parameter parameter : testResult.getParameters()) {
-            System.out.println("@@@@" + " " + parameter.getKind() + " " + parameter.getName() + " " + parameter.getValue());
-        }
+            String labelName = label.getName();
 
-        for (Step step: getListener().getSteps()) {
-            System.out.println("****" + " " + step.getTitle() + " " + step.getName());
+            if("testId".equals(labelName)) {
+
+                for(String caseId: label.getValue().split(",")) {
+
+                    if (caseId.trim().startsWith(TestRailType.CASE.mark)) {
+                        int status = getTestRailStatusCodeFor(testResult);
+                        JSONArray testsJSONArray = TestRailAdapter.getInstance().getData().getJSONArray("test");
+
+                        for (int i = 0; i < testsJSONArray.length(); i++) {
+
+                            try {
+                                JSONObject testJSON = testsJSONArray.getJSONObject(i);
+
+                                if (new TestRailEntity(caseId).getId() == testJSON.getInt("case_id")) {
+                                    int testId = testJSON.getInt("id");
+                                    testRailAdapter.addTestResult(testId, status);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+                break;
+            }
         }
 
         System.out.println(buildTestResultComment(testResult));
@@ -75,16 +69,18 @@ public class ReportTestRail extends ListenerFunction {
         StringBuffer comment = new StringBuffer();
         comment
                 .append("[INFO] ------------------------------------------------------------------------")
-                .append("\n").append(getLabels(testResult))
-                .append("\n").append(getTimings(testResult))
-                .append("\n").append("-------------------------------------------------------------------------------");
+                .append(getLabels(testResult))
+                .append(getTimings(testResult))
+                .append(getParameters(testResult))
+                .append(getSteps(testResult))
+                .append("\n-------------------------------------------------------------------------------");
         return comment.toString();
     }
 
     private StringBuffer getLabels(TestCaseResult testResult) {
         StringBuffer labels = new StringBuffer();
 
-        labels.append("Labels:");
+        labels.append("\nLabels:");
         for (Label label : testResult.getLabels()) {
             labels
                     .append("\n\t")
@@ -104,12 +100,40 @@ public class ReportTestRail extends ListenerFunction {
         long total = stop - start;
 
         timings
-                .append("Timings:")
+                .append("\nTimings:")
                 .append("\n\tstart: ").append(new Date(start))
                 .append("\n\tstop: ").append(new Date(stop))
                 .append("\n\ttotal: ").append(new SimpleDateFormat("m'm 's's 'SSS'ms'").format(total));
 
         return timings;
+    }
+
+    private StringBuffer getParameters(TestCaseResult testResult) {
+        StringBuffer parameters = new StringBuffer();
+
+        parameters.append("Parameters:");
+
+        for (Parameter parameter : testResult.getParameters()) {
+            parameters
+                    .append("\n\t")
+                    .append(parameter.getName())
+                    .append(": ")
+                    .append(parameter.getValue());
+        }
+        return parameters;
+    }
+
+    private StringBuffer getSteps(TestCaseResult testResult) {
+        StringBuffer parameters = new StringBuffer();
+
+        parameters.append("Steps:");
+
+        for (Step step : testResult.getSteps()) {
+            parameters
+                    .append("\n\t")
+                    .append(step.getTitle());
+        }
+        return parameters;
     }
 
     protected int getTestRailStatusCodeFor(TestCaseResult testResult) {
