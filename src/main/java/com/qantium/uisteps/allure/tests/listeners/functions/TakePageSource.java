@@ -20,13 +20,7 @@ public class TakePageSource extends ListenerFunction {
 
     @Override
     public boolean needsOn(Event event) {
-        MetaInfo meta = new MetaInfo(getListener().getLastStep().getTitle());
-        String listenMeta = meta.get(Meta.LISTEN.toString());
-        String attachSource =  meta.get(Meta.ATTACH_SOURCE.toString());
-        return super.needsOn(event)
-                && getBrowserManager().hasAny()
-                && !"false".equals(listenMeta)
-                && !"false".equals(attachSource);
+        return super.needsOn(event) && getBrowserManager().hasAny();
     }
 
     @Override

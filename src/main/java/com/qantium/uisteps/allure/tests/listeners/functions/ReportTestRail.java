@@ -20,10 +20,8 @@ import java.util.Date;
  */
 public class ReportTestRail extends ListenerFunction {
 
-    private TestRailAdapter testRailAdapter = TestRailAdapter.getInstance();
-
     public ReportTestRail() {
-        super(new Event[]{Event.TEST_FINISHED});
+        super(new Event[]{Event.AFTER_TEST_FINISHED});
     }
 
     @Override
@@ -35,34 +33,39 @@ public class ReportTestRail extends ListenerFunction {
             String labelName = label.getName();
 
             if("testId".equals(labelName)) {
-
-                for(String caseId: label.getValue().split(",")) {
-
-                    if (caseId.trim().startsWith(TestRailType.CASE.mark)) {
-                        int status = getTestRailStatusCodeFor(testResult);
-                        JSONArray testsJSONArray = TestRailAdapter.getInstance().getData().getJSONArray("test");
-
-                        for (int i = 0; i < testsJSONArray.length(); i++) {
-
-                            try {
-                                JSONObject testJSON = testsJSONArray.getJSONObject(i);
-
-                                if (new TestRailEntity(caseId).getId() == testJSON.getInt("case_id")) {
-                                    int testId = testJSON.getInt("id");
-                                    testRailAdapter.addTestResult(testId, status);
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
+                addTestResult(label, testResult);
                 break;
             }
         }
 
-        System.out.println(buildTestResultComment(testResult));
+        //TODO:
+        // System.out.println(buildTestResultComment(testResult));
         return null;
+    }
+
+    private void addTestResult(Label label, TestCaseResult testResult) {
+        for(String caseId: label.getValue().split(",")) {
+            if (caseId.trim().startsWith(TestRailType.CASE.mark)) {
+                int status = getTestRailStatusCodeFor(testResult);
+                JSONArray testsJSONArray = getTestRailAdapter().getData().getJSONArray("test");
+                addTestResult(caseId, status, testsJSONArray);
+            }
+        }
+    }
+
+    private void addTestResult(String caseId, int status, JSONArray testsJSONArray) {
+        for (int i = 0; i < testsJSONArray.length(); i++) {
+            try {
+                JSONObject testJSON = testsJSONArray.getJSONObject(i);
+
+                if (new TestRailEntity(caseId).getId() == testJSON.getInt("case_id")) {
+                    int testId = testJSON.getInt("id");
+                    getTestRailAdapter().addTestResult(testId, status);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private String buildTestResultComment(TestCaseResult testResult) {
@@ -137,11 +140,15 @@ public class ReportTestRail extends ListenerFunction {
     }
 
     protected int getTestRailStatusCodeFor(TestCaseResult testResult) {
-        return testRailAdapter.getStatusCode(testResult.getStatus().name());
+        return getTestRailAdapter().getStatusCode(testResult.getStatus().name());
     }
 
     @Override
     public boolean needsOn(Event event) {
-        return super.needsOn(event) && TestRailAdapter.actionIsDefined();
+        return super.needsOn(event) && getTestRailAdapter() .isDefined();
+    }
+
+    private TestRailAdapter getTestRailAdapter() {
+        return TestRailAdapter.getInstance();
     }
 }

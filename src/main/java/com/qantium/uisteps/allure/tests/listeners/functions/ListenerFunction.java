@@ -1,8 +1,10 @@
 package com.qantium.uisteps.allure.tests.listeners.functions;
 
 import com.qantium.uisteps.allure.tests.listeners.Event;
+import com.qantium.uisteps.allure.tests.listeners.Meta;
 import com.qantium.uisteps.allure.tests.listeners.StepListener;
 import com.qantium.uisteps.core.properties.UIStepsProperties;
+import com.qantium.uisteps.core.tests.MetaInfo;
 import com.qantium.uisteps.core.tests.listeners.Execute;
 
 import java.util.*;
@@ -57,7 +59,17 @@ public abstract class ListenerFunction {
     }
 
     public boolean needsOn(Event phase) {
-        return events.contains(phase);
+        String listenMeta = "";
+        String attachScreenShot = "";
+        ru.yandex.qatools.allure.model.Step lastStep = getListener().getLastStep();
+        if(lastStep != null && lastStep.getTitle() != null) {
+            MetaInfo meta = new MetaInfo(lastStep.getTitle());
+            listenMeta = meta.get(Meta.LISTEN.toString());
+            attachScreenShot = meta.get(Meta.ATTACH_SCREENSHOT.toString());
+        }
+        return events.contains(phase)
+                && !"false".equals(listenMeta)
+                && !"false".equals(attachScreenShot);
     }
 
     public abstract Object execute();

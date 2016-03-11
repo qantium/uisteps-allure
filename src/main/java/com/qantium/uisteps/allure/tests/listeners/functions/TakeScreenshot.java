@@ -2,10 +2,8 @@ package com.qantium.uisteps.allure.tests.listeners.functions;
 
 import com.qantium.uisteps.allure.browser.BrowserManager;
 import com.qantium.uisteps.allure.tests.listeners.Event;
-import com.qantium.uisteps.allure.tests.listeners.Meta;
 import com.qantium.uisteps.core.properties.UIStepsProperty;
 import com.qantium.uisteps.core.screenshots.Screenshot;
-import com.qantium.uisteps.core.tests.MetaInfo;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import ru.yandex.qatools.allure.annotations.Step;
 
@@ -22,13 +20,7 @@ public class TakeScreenshot extends ListenerFunction {
 
     @Override
     public boolean needsOn(Event event) {
-        MetaInfo meta = new MetaInfo(getListener().getLastStep().getTitle());
-        String listenMeta = meta.get(Meta.LISTEN.toString());
-        String attachScreenShot = meta.get(Meta.ATTACH_SCREENSHOT.toString());
-        return super.needsOn(event)
-                && getBrowserManager().hasAny()
-                && !"false".equals(listenMeta)
-                && !"false".equals(attachScreenShot);
+        return super.needsOn(event) && getBrowserManager().hasAny();
     }
 
     @Override

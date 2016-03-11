@@ -12,7 +12,7 @@ import ru.yandex.qatools.allure.model.TestCaseResult;
 public class ClearTitles extends ListenerFunction {
 
     public ClearTitles() {
-        super(new Event[]{Event.AFTER_TEST_FINISHED});
+        super(new Event[]{Event.TEST_FINISHED});
     }
 
     @Override

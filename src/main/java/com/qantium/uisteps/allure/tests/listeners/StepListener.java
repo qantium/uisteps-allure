@@ -25,6 +25,10 @@ public class StepListener extends LifecycleListener {
     private TestCaseResult test;
 
 
+    public StepListener() {
+        test = getTestStorage().get();
+    }
+
     public Step getLastStep() {
         return lastStep;
     }
@@ -47,7 +51,6 @@ public class StepListener extends LifecycleListener {
     public void fire(StepStartedEvent event) {
         lastStep = getStepStorage().getLast();
         steps.add(getStepStorage().getLast());
-        test = getTestStorage().get();
         fire(Event.STEP_STARTED);
     }
 

@@ -7,10 +7,6 @@ import ru.yandex.qatools.allure.annotations.Step;
  */
 public class BrowserManager extends com.qantium.uisteps.core.browser.BrowserManager {
 
-    public BrowserManager() {
-        setBrowserFactory(new BrowserFactory());
-    }
-
     @Step("Open {0}")
     @Override
     public com.qantium.uisteps.core.browser.Browser open(com.qantium.uisteps.core.browser.Browser browser) {
