@@ -1,7 +1,8 @@
 package com.qantium.uisteps.allure.tests.listeners;
 
+import com.qantium.uisteps.allure.tests.BaseTest;
 import com.qantium.uisteps.allure.tests.listeners.functions.ListenerFunction;
-import com.qantium.uisteps.core.tests.MetaInfo;
+import com.qantium.uisteps.core.lifecycle.MetaInfo;
 import org.apache.commons.lang3.StringUtils;
 import ru.yandex.qatools.allure.Allure;
 import ru.yandex.qatools.allure.events.*;
@@ -22,19 +23,25 @@ public class StepListener extends LifecycleListener {
     private final Set<ListenerFunction> functions = new LinkedHashSet();
     private Step lastStep;
     private List<Step> steps = new LinkedList();
-    private TestCaseResult test;
+    private TestCaseResult testResult;
+    private final BaseTest test;
 
 
-    public StepListener() {
-        test = getTestStorage().get();
+    public StepListener(BaseTest test) {
+        this.test = test;
+        testResult = getTestStorage().get();
+    }
+
+    public BaseTest getTest() {
+        return test;
     }
 
     public Step getLastStep() {
         return lastStep;
     }
 
-    public TestCaseResult getTest() {
-        return test;
+    public TestCaseResult getTestResult() {
+        return testResult;
     }
 
     public List<Step> getSteps() {
@@ -61,7 +68,6 @@ public class StepListener extends LifecycleListener {
     @Override
     public void fire(TestCaseFinishedEvent event) {
         fire(Event.TEST_FINISHED);
-        fire(Event.AFTER_TEST_FINISHED);
     }
 
     @Override
@@ -71,13 +77,13 @@ public class StepListener extends LifecycleListener {
 
     @Override
     public void fire(StepEvent event) {
-        if(event instanceof StepFailureEvent) {
+        if (event instanceof StepFailureEvent) {
             fire(Event.STEP_FAILED);
         }
     }
 
     public void setTitleTo(Step step) {
-        if(step != null) {
+        if (step != null) {
             String lastStepTitle = step.getTitle();
 
             if (!StringUtils.isEmpty(step.getTitle())) {
@@ -95,7 +101,7 @@ public class StepListener extends LifecycleListener {
         }
     }
 
-    protected void fire (Event event) {
+    protected void fire(Event event) {
         for (ListenerFunction function : functions) {
             if (function.needsOn(event)) {
                 function.execute();

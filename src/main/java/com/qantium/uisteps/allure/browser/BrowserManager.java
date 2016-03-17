@@ -1,5 +1,6 @@
 package com.qantium.uisteps.allure.browser;
 
+import com.qantium.uisteps.allure.browser.factory.BrowserFactory;
 import ru.yandex.qatools.allure.annotations.Step;
 
 /**
@@ -7,28 +8,26 @@ import ru.yandex.qatools.allure.annotations.Step;
  */
 public class BrowserManager extends com.qantium.uisteps.core.browser.BrowserManager {
 
-    @Step("Open {0}")
+    public BrowserManager() {
+        setBrowserFactory(new BrowserFactory());
+    }
+
+    @Step("Open {0} META[listen=false]")
     @Override
     public com.qantium.uisteps.core.browser.Browser open(com.qantium.uisteps.core.browser.Browser browser) {
         return super.open(browser);
     }
 
-    @Step
+    @Step("Switch to browser by index {0} META[listen=false]")
     @Override
     public com.qantium.uisteps.core.browser.Browser switchToBrowserByIndex(int index) {
         return super.switchToBrowserByIndex(index);
     }
 
-    @Step
+    @Step("Close current browser META[listen=false]")
     @Override
     public void closeCurrentBrowser() {
         super.closeCurrentBrowser();
-    }
-
-    @Step
-    @Override
-    public void closeAllBrowsers() {
-        super.closeAllBrowsers();
     }
 
 }

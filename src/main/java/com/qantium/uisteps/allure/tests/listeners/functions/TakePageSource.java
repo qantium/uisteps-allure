@@ -1,10 +1,9 @@
 package com.qantium.uisteps.allure.tests.listeners.functions;
 
-import com.qantium.uisteps.allure.browser.BrowserManager;
 import com.qantium.uisteps.allure.tests.listeners.Event;
 import com.qantium.uisteps.allure.tests.listeners.Meta;
 import com.qantium.uisteps.core.properties.UIStepsProperty;
-import com.qantium.uisteps.core.tests.MetaInfo;
+import com.qantium.uisteps.core.lifecycle.MetaInfo;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import ru.yandex.qatools.allure.annotations.Step;
 
@@ -18,9 +17,19 @@ public class TakePageSource extends ListenerFunction {
         super(UIStepsProperty.SOURCE_TAKE.toString());
     }
 
-    @Override
     public boolean needsOn(Event event) {
-        return super.needsOn(event) && getBrowserManager().hasAny();
+        String listenMeta = "";
+        String attachSource = "";
+        ru.yandex.qatools.allure.model.Step lastStep = getListener().getLastStep();
+        if(lastStep != null && lastStep.getTitle() != null) {
+            MetaInfo meta = new MetaInfo(lastStep.getTitle());
+            listenMeta = meta.get(Meta.LISTEN.toString());
+            attachSource = meta.get(Meta.ATTACH_SOURCE.toString());
+        }
+        return super.needsOn(event)
+                && !"false".equals(listenMeta)
+                && !"false".equals(attachSource)
+                && getListener().getTest().getBrowserManager().hasAny();
     }
 
     @Override
@@ -30,7 +39,7 @@ public class TakePageSource extends ListenerFunction {
 
     @Step("Attach page source META[listen=false]")
     protected String attachPageSource() {
-        String pageSource = getBrowserManager().getCurrentBrowser().getDriver().getPageSource();
+        String pageSource = getListener().getTest().inOpenedBrowser().getDriver().getPageSource();
         attachPageSource(pageSource);
         return pageSource;
     }
@@ -38,9 +47,5 @@ public class TakePageSource extends ListenerFunction {
     @Attachment(value = "page source", type = "text/plain")
     protected String attachPageSource(String pageSource) {
         return pageSource;
-    }
-
-    private BrowserManager getBrowserManager() {
-        return new BrowserManager();
     }
 }

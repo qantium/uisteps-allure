@@ -2,7 +2,6 @@ package com.qantium.uisteps.allure.browser;
 
 import com.qantium.uisteps.core.browser.pages.Page;
 import com.qantium.uisteps.core.browser.pages.UIElement;
-import com.qantium.uisteps.core.browser.pages.UIObject;
 import com.qantium.uisteps.core.browser.pages.elements.CheckBox;
 import com.qantium.uisteps.core.browser.pages.elements.FileInput;
 import com.qantium.uisteps.core.browser.pages.elements.RadioButtonGroup;
@@ -14,6 +13,7 @@ import com.qantium.uisteps.core.browser.pages.elements.alert.PromtAlert;
 import com.qantium.uisteps.core.screenshots.Ignored;
 import com.qantium.uisteps.core.screenshots.Photographer;
 import com.qantium.uisteps.core.screenshots.Screenshot;
+import com.qantium.uisteps.allure.storage.Storage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -410,26 +410,24 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
         return super.inScreenshotIgnoring(areas);
     }
 
-    @Step
     @Override
     public Screenshot takeScreenshot() {
-        return super.takeScreenshot();
+        Screenshot screenshot = super.takeScreenshot();
+        new Storage().attach("screenshot", screenshot.asByteArray());
+        return screenshot;
     }
 
-    @Step
     @Override
     public Screenshot takeScreenshot(UIElement... elements) {
-        return super.takeScreenshot(elements);
+        Screenshot screenshot = super.takeScreenshot(elements);
+        new Storage().attach("screenshot", screenshot.asByteArray());
+        return screenshot;
     }
 
-    @Step
     @Override
     public Screenshot takeScreenshot(Ignored... elements) {
-        return super.takeScreenshot(elements);
-    }
-
-    @Override
-    protected void setDriver(WebDriver driver) {
-        super.setDriver(driver);
+        Screenshot screenshot = super.takeScreenshot(elements);
+        new Storage().attach("screenshot", screenshot.asByteArray());
+        return screenshot;
     }
 }

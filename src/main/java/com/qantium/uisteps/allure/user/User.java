@@ -1,13 +1,15 @@
 package com.qantium.uisteps.allure.user;
 
 import com.qantium.uisteps.allure.browser.BrowserManager;
+import com.qantium.uisteps.allure.storage.Storage;
+
 /**
  * Created by Anton Solyankin
  */
 public class User extends com.qantium.uisteps.core.user.User {
 
-    @Override
-    protected void setBrowserManager() {
+    public User() {
         setBrowserManager(new BrowserManager());
+        setStorage(new Storage());
     }
 }

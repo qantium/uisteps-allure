@@ -21,12 +21,12 @@ import java.util.Date;
 public class ReportTestRail extends ListenerFunction {
 
     public ReportTestRail() {
-        super(new Event[]{Event.AFTER_TEST_FINISHED});
+        super(new Event[]{Event.TEST_FINISHED});
     }
 
     @Override
     public Object execute() {
-        TestCaseResult testResult = getListener().getTest();
+        TestCaseResult testResult = getListener().getTestResult();
 
         for (Label label : testResult.getLabels()) {
 

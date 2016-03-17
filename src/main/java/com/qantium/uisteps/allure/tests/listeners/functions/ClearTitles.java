@@ -1,7 +1,7 @@
 package com.qantium.uisteps.allure.tests.listeners.functions;
 
 import com.qantium.uisteps.allure.tests.listeners.Event;
-import com.qantium.uisteps.core.tests.MetaInfo;
+import com.qantium.uisteps.core.lifecycle.MetaInfo;
 import org.apache.commons.lang3.StringUtils;
 import ru.yandex.qatools.allure.model.Step;
 import ru.yandex.qatools.allure.model.TestCaseResult;
@@ -20,7 +20,7 @@ public class ClearTitles extends ListenerFunction {
         for(Step step: getListener().getSteps()) {
             clearTitleOf(step);
         }
-        clearTitleOf(getListener().getTest());
+        clearTitleOf(getListener().getTestResult());
         return null;
     }
 
