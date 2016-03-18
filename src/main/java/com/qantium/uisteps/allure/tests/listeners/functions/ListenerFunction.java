@@ -26,6 +26,7 @@ public abstract class ListenerFunction {
 
             switch (Execute.valueOf(execution.trim().toUpperCase())) {
                 case BEFORE_AND_AFTER_EACH_STEP:
+                    this.events.add(Event.STEP_FAILED);
                     this.events.add(Event.STEP_STARTED);
                     this.events.add(Event.STEP_FINISHED);
                     break;
@@ -33,6 +34,7 @@ public abstract class ListenerFunction {
                     this.events.add(Event.STEP_STARTED);
                     break;
                 case AFTER_EACH_STEP:
+                    this.events.add(Event.STEP_FAILED);
                     this.events.add(Event.STEP_FINISHED);
                     break;
                 case FOR_FAILURES:

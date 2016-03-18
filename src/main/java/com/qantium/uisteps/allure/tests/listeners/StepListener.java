@@ -102,10 +102,20 @@ public class StepListener extends LifecycleListener {
     }
 
     protected void fire(Event event) {
+        Exception exception = null;
+        ListenerFunction failedFunction = null;
         for (ListenerFunction function : functions) {
             if (function.needsOn(event)) {
-                function.execute();
+                try {
+                    function.execute();
+                } catch (Exception ex) {
+                    failedFunction = function;
+                    exception = ex;
+                }
             }
+        }
+        if(exception != null) {
+            throw new RuntimeException("Function " + failedFunction.getClass().getSimpleName() + " was failed in step listener!", exception);
         }
     }
 

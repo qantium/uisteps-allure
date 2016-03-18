@@ -21,10 +21,22 @@ import org.openqa.selenium.internal.WrapsElement;
 import ru.yandex.qatools.allure.annotations.Step;
 import ru.yandex.qatools.ashot.coordinates.Coords;
 
+import java.awt.*;
+
 /**
  * Created by Anton Solyankin
  */
 public class Browser extends com.qantium.uisteps.core.browser.Browser {
+
+    private Storage storage;
+
+    public Browser() {
+        setStorage(new Storage());
+    }
+
+    public void setStorage(Storage storage) {
+        this.storage = storage;
+    }
 
     @Step("Open {0}")
     @Override
@@ -413,21 +425,28 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
     @Override
     public Screenshot takeScreenshot() {
         Screenshot screenshot = super.takeScreenshot();
-        new Storage().attach("screenshot", screenshot.asByteArray());
+        storage.attach("screenshot", screenshot.asByteArray());
         return screenshot;
     }
 
     @Override
     public Screenshot takeScreenshot(UIElement... elements) {
         Screenshot screenshot = super.takeScreenshot(elements);
-        new Storage().attach("screenshot", screenshot.asByteArray());
+        storage.attach("screenshot", screenshot.asByteArray());
         return screenshot;
     }
 
     @Override
     public Screenshot takeScreenshot(Ignored... elements) {
         Screenshot screenshot = super.takeScreenshot(elements);
-        new Storage().attach("screenshot", screenshot.asByteArray());
+        storage.attach("screenshot", screenshot.asByteArray());
         return screenshot;
+    }
+
+    @Override
+    public String getPageSource() {
+        String pageSource = super.getPageSource();
+        storage.attach("page source", pageSource);
+        return pageSource;
     }
 }

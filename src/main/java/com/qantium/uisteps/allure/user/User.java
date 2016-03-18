@@ -12,4 +12,9 @@ public class User extends com.qantium.uisteps.core.user.User {
         setBrowserManager(new BrowserManager());
         setStorage(new Storage());
     }
+
+    @Override
+    public Storage getStorage() {
+        return (Storage) super.getStorage();
+    }
 }

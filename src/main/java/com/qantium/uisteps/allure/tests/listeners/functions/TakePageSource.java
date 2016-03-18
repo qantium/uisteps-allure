@@ -1,7 +1,9 @@
 package com.qantium.uisteps.allure.tests.listeners.functions;
 
+import com.qantium.uisteps.allure.tests.BaseTest;
 import com.qantium.uisteps.allure.tests.listeners.Event;
 import com.qantium.uisteps.allure.tests.listeners.Meta;
+import com.qantium.uisteps.core.browser.AlertException;
 import com.qantium.uisteps.core.properties.UIStepsProperty;
 import com.qantium.uisteps.core.lifecycle.MetaInfo;
 import ru.yandex.qatools.allure.annotations.Attachment;
@@ -26,10 +28,12 @@ public class TakePageSource extends ListenerFunction {
             listenMeta = meta.get(Meta.LISTEN.toString());
             attachSource = meta.get(Meta.ATTACH_SOURCE.toString());
         }
+
         return super.needsOn(event)
                 && !"false".equals(listenMeta)
                 && !"false".equals(attachSource)
-                && getListener().getTest().getBrowserManager().hasAny();
+                && getListener().getTest().getBrowserManager().hasAny()
+                && getListener().getTest().inOpenedBrowser().isAlive();
     }
 
     @Override
@@ -39,9 +43,8 @@ public class TakePageSource extends ListenerFunction {
 
     @Step("Attach page source META[listen=false]")
     protected String attachPageSource() {
-        String pageSource = getListener().getTest().inOpenedBrowser().getDriver().getPageSource();
-        attachPageSource(pageSource);
-        return pageSource;
+        BaseTest test = getListener().getTest();
+        return attachPageSource(test.getPageSource());
     }
 
     @Attachment(value = "page source", type = "text/plain")
