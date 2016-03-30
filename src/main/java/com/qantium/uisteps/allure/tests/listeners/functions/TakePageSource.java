@@ -25,8 +25,7 @@ public class TakePageSource extends ListenerFunction {
         ru.yandex.qatools.allure.model.Step lastStep = getListener().getLastStep();
         if(lastStep != null && lastStep.getTitle() != null) {
             MetaInfo meta = new MetaInfo(lastStep.getTitle());
-            listenMeta = meta.get(Meta.LISTEN.toString());
-            attachSource = meta.get(Meta.ATTACH_SOURCE.toString());
+            listenMeta = meta.get(Meta.ATTACH_SOURCE.toString());
         }
 
         return super.needsOn(event)

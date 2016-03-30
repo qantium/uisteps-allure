@@ -39,18 +39,6 @@ public class TakeScreenshot extends ListenerFunction {
     @Override
     public Screenshot execute() {
         BaseTest test = getListener().getTest();
-        try {
-            return test.takeScreenshot();
-        } catch (AlertException ex) {
-
-            try {
-                Screenshot screenshot = new Screenshot(new Robot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize())));
-                test.getStorage().attach("screenshot", screenshot.asByteArray());
-            } catch (AWTException e) {
-                throw new AlertException("Cannot get screen shot even by robot!", ex);
-            }
-
-            throw ex;
-        }
+        return test.takeScreenshot();
     }
 }

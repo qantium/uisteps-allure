@@ -19,8 +19,9 @@ public class BaseTest extends User {
         StepListener listener = new StepListener(this);
 
         listener
+//                .add(new Log())
                 .add(new TakeScreenshot())
-                .add(new TakePageSource())
+//                .add(new TakePageSource())
                 .add(new CloseBrowsers())
                 .add(new ClearTitles());
 

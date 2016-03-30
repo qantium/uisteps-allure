@@ -8,7 +8,7 @@ import com.qantium.uisteps.core.browser.pages.elements.RadioButtonGroup;
 import com.qantium.uisteps.core.browser.pages.elements.Select;
 import com.qantium.uisteps.core.browser.pages.elements.alert.Alert;
 import com.qantium.uisteps.core.browser.pages.elements.alert.AuthenticationAlert;
-import com.qantium.uisteps.core.browser.pages.elements.alert.ComfirmAlert;
+import com.qantium.uisteps.core.browser.pages.elements.alert.ConfirmAlert;
 import com.qantium.uisteps.core.browser.pages.elements.alert.PromtAlert;
 import com.qantium.uisteps.core.screenshots.Ignored;
 import com.qantium.uisteps.core.screenshots.Photographer;
@@ -16,12 +16,9 @@ import com.qantium.uisteps.core.screenshots.Screenshot;
 import com.qantium.uisteps.allure.storage.Storage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.internal.WrapsElement;
 import ru.yandex.qatools.allure.annotations.Step;
 import ru.yandex.qatools.ashot.coordinates.Coords;
 
-import java.awt.*;
 
 /**
  * Created by Anton Solyankin
@@ -153,31 +150,31 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
     //Elements
     @Step
     @Override
-    public void clear(WrapsElement input) {
+    public void clear(UIElement input) {
         super.clear(input);
     }
 
     @Override
     @Step("Type into \"{0}\" value \"{1}\"")
-    public void typeInto(WrapsElement input, Object text) {
+    public void typeInto(UIElement input, Object text) {
         super.typeInto(input, text);
     }
 
     @Override
     @Step("Enter into \"{0}\" value \"{1}\"")
-    public void enterInto(WrapsElement input, Object text) {
+    public void enterInto(UIElement input, Object text) {
         super.enterInto(input, text);
     }
 
     @Override
     @Step("Click \"{0}\" on point ({1};{2})")
-    public void clickOnPoint(WrapsElement element, int x, int y) {
+    public void clickOnPoint(UIElement element, int x, int y) {
         super.clickOnPoint(element, x, y);
     }
 
     @Step("Click \"{0}\"")
     @Override
-    public void click(WrapsElement element) {
+    public void click(UIElement element) {
         super.click(element);
     }
 
@@ -190,14 +187,14 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
 
     @Step
     @Override
-    public void dismiss(ComfirmAlert cofirm) {
-        super.dismiss(cofirm);
+    public void dismiss(ConfirmAlert confirm) {
+        super.dismiss(confirm);
     }
 
     @Step("Enter into \"{0}\" text \"{1}\"")
     @Override
-    public void enterInto(PromtAlert promt, String text) {
-        super.enterInto(promt, text);
+    public PromtAlert enterInto(PromtAlert promt, String text) {
+        return super.enterInto(promt, text);
     }
 
     @Step("Authenticate in \"{0}\" using login = \"{1}\" and password = \"{2}\"")
@@ -226,7 +223,7 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
 
     @Step("Click by right button over {0}")
     @Override
-    public void contextClick(WrapsElement element) {
+    public void contextClick(UIElement element) {
         super.contextClick(element);
     }
 
@@ -238,13 +235,13 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
 
     @Step("Depress mouse left button over {0}")
     @Override
-    public void releaseMouse(WrapsElement element) {
+    public void releaseMouse(UIElement element) {
         super.releaseMouse(element);
     }
 
     @Override
     @Step("Click and hold on \"{0}\"")
-    public void clickAndHold(WrapsElement element) {
+    public void clickAndHold(UIElement element) {
         super.clickAndHold(element);
     }
 
@@ -256,19 +253,19 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
 
     @Step("Double click on \"{0}\"")
     @Override
-    public void doubleClick(WrapsElement element) {
+    public void doubleClick(UIElement element) {
         super.doubleClick(element);
     }
 
     @Step("Double and drop \"{0}\" to \"{1}\"")
     @Override
-    public void dragAndDrop(WrapsElement source, WrapsElement target) {
+    public void dragAndDrop(UIElement source, UIElement target) {
         super.dragAndDrop(source, target);
     }
 
     @Step("Double and drop \"{0}\" with offset ({1}; {2})")
     @Override
-    public void dragAndDrop(WrapsElement element, int xOffset, int yOffset) {
+    public void dragAndDrop(UIElement element, int xOffset, int yOffset) {
         super.dragAndDrop(element, xOffset, yOffset);
     }
 
@@ -280,7 +277,7 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
 
     @Step("Click \"{0}\" and press the key \"{1}\"")
     @Override
-    public void keyDown(WrapsElement element, Keys theKey) {
+    public void keyDown(UIElement element, Keys theKey) {
         super.keyDown(element, theKey);
     }
 
@@ -292,7 +289,7 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
 
     @Step("Click \"{0}\" and lift the key \"{1}\"")
     @Override
-    public void keyUp(WrapsElement element, Keys theKey) {
+    public void keyUp(UIElement element, Keys theKey) {
         super.keyUp(element, theKey);
     }
 
@@ -304,13 +301,13 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
 
     @Step("Move mouse to \"{0}\" with offset ({1}; {2})")
     @Override
-    public void moveToElement(WrapsElement element, int xOffset, int yOffset) {
+    public void moveToElement(UIElement element, int xOffset, int yOffset) {
         super.moveToElement(element, xOffset, yOffset);
     }
 
     @Step("Move mouse over \"{0}\"")
     @Override
-    public void moveMouseOver(WrapsElement element) {
+    public void moveMouseOver(UIElement element) {
         super.moveMouseOver(element);
     }
 
@@ -323,37 +320,37 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
 
     @Step("Scroll window to {0}")
     @Override
-    public void scrollWindowToTarget(WrapsElement element) {
+    public void scrollWindowToTarget(UIElement element) {
         super.scrollWindowToTarget(element);
     }
 
     @Step("Scroll window to {0} by offset ({1}; {2})")
     @Override
-    public void scrollWindowToTargetByOffset(WrapsElement element, int x, int y) {
+    public void scrollWindowToTargetByOffset(UIElement element, int x, int y) {
         super.scrollWindowToTargetByOffset(element, x, y);
     }
 
     @Step("Move \"{0}\" to \"{1}\"")
     @Override
-    public void scrollToTarget(WrapsElement scroll, WrapsElement target) {
+    public void scrollToTarget(UIElement scroll, UIElement target) {
         super.scrollToTarget(scroll, target);
     }
 
     @Step("Move \"{0}\" to \"{1}\"")
     @Override
-    public void horizontalScroll(WrapsElement scroll, int pixels) {
+    public void horizontalScroll(UIElement scroll, int pixels) {
         super.horizontalScroll(scroll, pixels);
     }
 
     @Step("Move \"{0}\" to \"{1}\"")
     @Override
-    public void verticalScroll(WrapsElement scroll, int pixels) {
+    public void verticalScroll(UIElement scroll, int pixels) {
         super.verticalScroll(scroll, pixels);
     }
 
     @Step("Move \"{0}\" by offset ({1}; {2})")
     @Override
-    public void scroll(WrapsElement scroll, int x, int y) {
+    public void scroll(UIElement scroll, int x, int y) {
         super.scroll(scroll, x, y);
     }
 
