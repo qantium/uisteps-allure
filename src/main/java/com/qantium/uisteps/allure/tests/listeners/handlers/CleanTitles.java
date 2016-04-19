@@ -1,39 +1,41 @@
-package com.qantium.uisteps.allure.tests.listeners.functions;
+package com.qantium.uisteps.allure.tests.listeners.handlers;
 
 import com.qantium.uisteps.allure.tests.listeners.Event;
+import static com.qantium.uisteps.allure.tests.listeners.Event.*;
 import com.qantium.uisteps.core.lifecycle.MetaInfo;
-import org.apache.commons.lang3.StringUtils;
 import ru.yandex.qatools.allure.model.Step;
 import ru.yandex.qatools.allure.model.TestCaseResult;
+
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Created by Anton Solyankin
  */
-public class ClearTitles extends ListenerFunction {
+public class CleanTitles extends EventHandler {
 
-    public ClearTitles() {
-        super(new Event[]{Event.TEST_FINISHED});
+    public CleanTitles() {
+        super(new Event[]{TEST_FINISHED});
     }
 
     @Override
-    public Object execute() {
-        for(Step step: getListener().getSteps()) {
+    public Object handle(Event event) {
+        for (Step step : getListener().getSteps()) {
             clearTitleOf(step);
         }
-        clearTitleOf(getListener().getTestResult());
+        clearTitleOf(getListener().getTestCase());
         return null;
     }
 
     private void clearTitleOf(Step step) {
         String stepTitle = step.getTitle();
-        if (!StringUtils.isEmpty(stepTitle)) {
+        if (!isEmpty(stepTitle)) {
             step.setTitle(new MetaInfo(stepTitle).getTitleWithoutMeta());
         }
     }
 
     private void clearTitleOf(TestCaseResult test) {
         String testTitle = test.getTitle();
-        if (!StringUtils.isEmpty(testTitle)) {
+        if (!isEmpty(testTitle)) {
             test.setTitle(new MetaInfo(testTitle).getTitleWithoutMeta());
         }
     }

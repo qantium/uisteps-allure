@@ -1,18 +1,19 @@
-package com.qantium.uisteps.allure.tests.listeners.functions;
+package com.qantium.uisteps.allure.tests.listeners.handlers;
 
 import com.qantium.uisteps.allure.tests.listeners.Event;
+import static com.qantium.uisteps.allure.tests.listeners.Event.*;
 
 /**
  * Created by Anton Solyankin
  */
-public class CloseBrowsers extends ListenerFunction {
+public class CloseBrowsers extends EventHandler {
 
     public CloseBrowsers() {
-        super(new Event[]{Event.TEST_FINISHED});
+        super(new Event[]{TEST_FINISHED});
     }
 
     @Override
-    public Object execute() {
+    public Object handle(Event event) {
         closeBrowsers();
         return null;
     }

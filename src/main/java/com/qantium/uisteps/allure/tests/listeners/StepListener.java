@@ -1,35 +1,41 @@
 package com.qantium.uisteps.allure.tests.listeners;
 
 import com.qantium.uisteps.allure.tests.BaseTest;
-import com.qantium.uisteps.allure.tests.listeners.functions.ListenerFunction;
+import com.qantium.uisteps.allure.tests.listeners.handlers.EventHandler;
 import com.qantium.uisteps.core.lifecycle.MetaInfo;
-import org.apache.commons.lang3.StringUtils;
 import ru.yandex.qatools.allure.Allure;
 import ru.yandex.qatools.allure.events.*;
 import ru.yandex.qatools.allure.experimental.LifecycleListener;
-import ru.yandex.qatools.allure.model.TestCaseResult;
-import ru.yandex.qatools.allure.storages.StepStorage;
 import ru.yandex.qatools.allure.model.Step;
+import ru.yandex.qatools.allure.model.TestCaseResult;
+import ru.yandex.qatools.allure.model.TestSuiteResult;
+import ru.yandex.qatools.allure.storages.StepStorage;
 import ru.yandex.qatools.allure.storages.TestCaseStorage;
+import ru.yandex.qatools.allure.storages.TestSuiteStorage;
 
 import java.lang.reflect.Field;
 import java.util.*;
+
+import static com.qantium.uisteps.allure.tests.listeners.Event.*;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Created by Anton Solyankin
  */
 public class StepListener extends LifecycleListener {
 
-    private final Set<ListenerFunction> functions = new LinkedHashSet();
+    private final Set<EventHandler> handlers = new LinkedHashSet();
     private Step lastStep;
-    private List<Step> steps = new LinkedList();
-    private TestCaseResult testResult;
+    private Set<Step> steps = new HashSet();
+    private TestSuiteResult testSuite;
+    private TestCaseResult testCase;
     private final BaseTest test;
-
+    private boolean stepIsFailed;
+    private Throwable error;
 
     public StepListener(BaseTest test) {
         this.test = test;
-        testResult = getTestStorage().get();
+        testCase = getTestStorage().get();
     }
 
     public BaseTest getTest() {
@@ -40,45 +46,89 @@ public class StepListener extends LifecycleListener {
         return lastStep;
     }
 
-    public TestCaseResult getTestResult() {
-        return testResult;
+    public TestCaseResult getTestCase() {
+        return testCase;
     }
 
-    public List<Step> getSteps() {
+    public TestSuiteResult getTestSuite() {
+        if (testSuite == null) {
+            Iterator<Map.Entry<String, TestSuiteResult>> iterator = getSuiteStorage().getStartedSuites().iterator();
+            while (iterator.hasNext()) {
+                testSuite = iterator.next().getValue();
+            }
+        }
+        return testSuite;
+    }
+
+    public void setTestSuite(TestSuiteResult testSuite) {
+        this.testSuite = testSuite;
+    }
+
+    public Set<Step> getSteps() {
         return steps;
     }
 
-    public StepListener add(ListenerFunction function) {
-        function.setListener(this);
-        functions.add(function);
+
+    public StepListener add(EventHandler handler) {
+        handler.setListener(this);
+        handlers.add(handler);
         return this;
+    }
+
+    @Override
+    public void fire(TestSuiteEvent event) {
+        if (event instanceof TestSuiteStartedEvent) {
+            TestSuiteStartedEvent suiteStartedEvent = (TestSuiteStartedEvent) event;
+            String testSuiteUID = suiteStartedEvent.getUid();
+            testSuite = getSuiteStorage().get(testSuiteUID);
+            fire(SUITE_STARTED);
+        }
+    }
+
+    @Override
+    public void fire(TestSuiteFinishedEvent event) {
+        fire(SUITE_FINISHED);
     }
 
     @Override
     public void fire(StepStartedEvent event) {
         lastStep = getStepStorage().getLast();
         steps.add(getStepStorage().getLast());
-        fire(Event.STEP_STARTED);
+        fire(STEP_STARTED);
     }
 
     @Override
     public void fire(TestCaseStartedEvent event) {
+        fire(Event.TEST_STARTED);
     }
 
     @Override
     public void fire(TestCaseFinishedEvent event) {
-        fire(Event.TEST_FINISHED);
+        fire(TEST_FINISHED);
     }
 
     @Override
     public void fire(StepFinishedEvent event) {
-        fire(Event.STEP_FINISHED);
+
+        if (stepIsFailed) {
+            stepIsFailed = false;
+        } else {
+            error = null;
+        }
+        fire(STEP_FINISHED);
+    }
+
+    public Throwable getError() {
+        return error;
     }
 
     @Override
     public void fire(StepEvent event) {
         if (event instanceof StepFailureEvent) {
-            fire(Event.STEP_FAILED);
+            stepIsFailed = true;
+            StepFailureEvent failure = (StepFailureEvent) event;
+            error = failure.getThrowable();
+            fire(STEP_FAILED);
         }
     }
 
@@ -86,7 +136,7 @@ public class StepListener extends LifecycleListener {
         if (step != null) {
             String lastStepTitle = step.getTitle();
 
-            if (!StringUtils.isEmpty(step.getTitle())) {
+            if (!isEmpty(step.getTitle())) {
                 step.setTitle(new MetaInfo(lastStepTitle).getTitleWithoutMeta());
             }
         }
@@ -96,26 +146,26 @@ public class StepListener extends LifecycleListener {
         TestCaseResult test = getTestStorage().get();
         String lastStepTitle = test.getTitle();
 
-        if (!StringUtils.isEmpty(test.getTitle())) {
+        if (!isEmpty(test.getTitle())) {
             test.setTitle(new MetaInfo(lastStepTitle).getTitleWithoutMeta());
         }
     }
 
     protected void fire(Event event) {
         Exception exception = null;
-        ListenerFunction failedFunction = null;
-        for (ListenerFunction function : functions) {
-            if (function.needsOn(event)) {
+        EventHandler failedHandler = null;
+        for (EventHandler handler : handlers) {
+            if (handler.needsOn(event)) {
                 try {
-                    function.execute();
+                    handler.handle(event);
                 } catch (Exception ex) {
-                    failedFunction = function;
+                    failedHandler = handler;
                     exception = ex;
                 }
             }
         }
-        if(exception != null) {
-            throw new RuntimeException("Function " + failedFunction.getClass().getSimpleName() + " was failed in step listener!", exception);
+        if (exception != null) {
+            throw new StepListenerException(failedHandler, exception);
         }
     }
 
@@ -126,6 +176,11 @@ public class StepListener extends LifecycleListener {
     public TestCaseStorage getTestStorage() {
         return get(TestCaseStorage.class, "testCaseStorage");
     }
+
+    public TestSuiteStorage getSuiteStorage() {
+        return get(TestSuiteStorage.class, "testSuiteStorage");
+    }
+
 
     private <T> T get(Class<T> fieldType, String fieldName) {
         try {

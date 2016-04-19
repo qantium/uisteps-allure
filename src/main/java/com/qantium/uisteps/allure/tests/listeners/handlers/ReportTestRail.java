@@ -1,6 +1,7 @@
-package com.qantium.uisteps.allure.tests.listeners.functions;
+package com.qantium.uisteps.allure.tests.listeners.handlers;
 
 import com.qantium.uisteps.allure.tests.listeners.Event;
+import static com.qantium.uisteps.allure.tests.listeners.Event.*;
 import com.qantium.uisteps.core.utils.testrail.TestRailAdapter;
 import com.qantium.uisteps.core.utils.testrail.TestRailEntity;
 import com.qantium.uisteps.core.utils.testrail.TestRailType;
@@ -18,15 +19,15 @@ import java.util.Date;
 /**
  * Created by Anton Solyankin
  */
-public class ReportTestRail extends ListenerFunction {
+public class ReportTestRail extends EventHandler {
 
     public ReportTestRail() {
-        super(new Event[]{Event.TEST_FINISHED});
+        super(new Event[]{TEST_FINISHED});
     }
 
     @Override
-    public Object execute() {
-        TestCaseResult testResult = getListener().getTestResult();
+    public Object handle(Event event) {
+        TestCaseResult testResult = getListener().getTestCase();
 
         for (Label label : testResult.getLabels()) {
 

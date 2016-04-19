@@ -1,6 +1,5 @@
 package com.qantium.uisteps.allure.storage;
 
-import com.qantium.uisteps.core.screenshots.Screenshot;
 import net.lightbody.bmp.core.har.Har;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import ru.yandex.qatools.allure.annotations.Step;

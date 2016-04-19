@@ -1,5 +1,6 @@
 package com.qantium.uisteps.allure.browser;
 
+import com.qantium.uisteps.allure.storage.Storage;
 import com.qantium.uisteps.core.browser.pages.Page;
 import com.qantium.uisteps.core.browser.pages.UIElement;
 import com.qantium.uisteps.core.browser.pages.elements.CheckBox;
@@ -13,7 +14,6 @@ import com.qantium.uisteps.core.browser.pages.elements.alert.PromtAlert;
 import com.qantium.uisteps.core.screenshots.Ignored;
 import com.qantium.uisteps.core.screenshots.Photographer;
 import com.qantium.uisteps.core.screenshots.Screenshot;
-import com.qantium.uisteps.allure.storage.Storage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import ru.yandex.qatools.allure.annotations.Step;
