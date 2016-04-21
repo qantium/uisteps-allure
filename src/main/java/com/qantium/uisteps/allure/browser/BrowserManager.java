@@ -1,8 +1,8 @@
 package com.qantium.uisteps.allure.browser;
 
 import com.qantium.uisteps.allure.browser.factory.BrowserFactory;
-import com.qantium.uisteps.core.browser.Browser;
 import ru.yandex.qatools.allure.annotations.Step;
+import com.qantium.uisteps.core.browser.Browser;
 
 /**
  * Created by Anton Solyankin

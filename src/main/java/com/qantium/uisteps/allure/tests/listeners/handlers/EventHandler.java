@@ -1,14 +1,15 @@
 package com.qantium.uisteps.allure.tests.listeners.handlers;
 
 import com.qantium.uisteps.allure.tests.listeners.Event;
-import static com.qantium.uisteps.allure.tests.listeners.Event.*;
 import com.qantium.uisteps.allure.tests.listeners.StepListener;
 import com.qantium.uisteps.core.lifecycle.Execute;
 import com.qantium.uisteps.core.properties.UIStepsProperties;
 
-import static java.util.Arrays.*;
 import java.util.HashSet;
 import java.util.Set;
+
+import static com.qantium.uisteps.allure.tests.listeners.Event.*;
+import static java.util.Arrays.asList;
 
 /**
  * Created by Anton Solyankin

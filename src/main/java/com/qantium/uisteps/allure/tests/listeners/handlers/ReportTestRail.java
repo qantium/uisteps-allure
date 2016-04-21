@@ -1,7 +1,6 @@
 package com.qantium.uisteps.allure.tests.listeners.handlers;
 
 import com.qantium.uisteps.allure.tests.listeners.Event;
-import static com.qantium.uisteps.allure.tests.listeners.Event.*;
 import com.qantium.uisteps.core.utils.testrail.TestRailAdapter;
 import com.qantium.uisteps.core.utils.testrail.TestRailEntity;
 import com.qantium.uisteps.core.utils.testrail.TestRailType;
@@ -15,6 +14,8 @@ import ru.yandex.qatools.allure.model.TestCaseResult;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static com.qantium.uisteps.allure.tests.listeners.Event.TEST_FINISHED;
 
 /**
  * Created by Anton Solyankin

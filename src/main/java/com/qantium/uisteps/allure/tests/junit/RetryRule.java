@@ -1,12 +1,11 @@
 package com.qantium.uisteps.allure.tests.junit;
 
-import static com.qantium.uisteps.core.properties.UIStepsProperties.*;
-import static com.qantium.uisteps.core.properties.UIStepsProperty.*;
-
-import com.qantium.uisteps.allure.tests.BaseTest;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+
+import static com.qantium.uisteps.core.properties.UIStepsProperties.*;
+import static com.qantium.uisteps.core.properties.UIStepsProperty.*;
 
 
 /**

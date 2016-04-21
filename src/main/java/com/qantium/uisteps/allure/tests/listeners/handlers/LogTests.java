@@ -1,29 +1,26 @@
 package com.qantium.uisteps.allure.tests.listeners.handlers;
 
+import com.google.common.io.Files;
 import com.qantium.uisteps.allure.tests.listeners.Event;
 import com.qantium.uisteps.core.lifecycle.MetaInfo;
-
-import static com.qantium.uisteps.core.properties.UIStepsProperties.*;
-import static com.qantium.uisteps.core.properties.UIStepsProperty.*;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.yandex.qatools.allure.model.*;
 
-import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-
-import com.google.common.io.Files;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE_HOME_DIR;
+import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE_LOG_ATTACH;
+import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE_LOG_DIR;
 import static com.qantium.uisteps.allure.tests.listeners.Event.*;
+import static com.qantium.uisteps.core.properties.UIStepsProperties.*;
+import static com.qantium.uisteps.core.properties.UIStepsProperty.*;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
@@ -33,6 +30,7 @@ public class LogTests extends EventHandler {
 
     private List<String> log = new ArrayList();
     private Charset UTF_8 = Charset.forName("UTF-8");
+   private String dir = getProperty(USER_DIR) + getProperty(ALLURE_HOME_DIR);
 
     public LogTests() {
         super(new Event[]{TEST_STARTED, TEST_FINISHED, STEP_STARTED, STEP_FAILED});
@@ -70,7 +68,7 @@ public class LogTests extends EventHandler {
         Logger logger = LoggerFactory.getLogger(LogTests.class);
 
         try {
-            File logFile = new File(getProperty(USER_DIR) + getProperty(ALLURE_LOG_DIR) + "/tests.log");
+            File logFile = new File(dir, "tests.log");
             if (!logFile.exists()) {
                 Files.createParentDirs(logFile);
             }
@@ -87,7 +85,7 @@ public class LogTests extends EventHandler {
     private void attachLog() {
         if ("true".equals(getProperty(ALLURE_LOG_ATTACH))) {
             UUID uid = UUID.randomUUID();
-            File file = new File(getProperty(USER_DIR) + getProperty(ALLURE_LOG_DIR), "log-" + uid + ".log");
+            File file = new File(dir, "log-" + uid + ".log");
             try {
                 for (String line : log) {
                     Files.append(line + "\n", file, UTF_8);
@@ -141,7 +139,9 @@ public class LogTests extends EventHandler {
                 }
             }
         } else {
-            log.add("TOTAL: " + new SimpleDateFormat("mm'm' ss's' SSS'ms'").format(testCase.getStop() - testCase.getStart()));
+            log.add("STATUS: " + testCase.getStatus());
+            long total = testCase.getStop() - testCase.getStart();
+            log.add("TOTAL: " + new SimpleDateFormat("mm'm' ss's' SSS'ms'").format(total));
         }
 
         log.add("------------------------------------------------------------------------------------------------------");

@@ -3,7 +3,6 @@ package com.qantium.uisteps.allure.tests.listeners.handlers;
 import com.google.common.io.Files;
 import com.qantium.uisteps.allure.tests.listeners.Event;
 import ru.yandex.qatools.allure.model.Attachment;
-import static ru.yandex.qatools.allure.model.Status.*;
 import ru.yandex.qatools.allure.model.Step;
 
 import java.io.File;
@@ -15,6 +14,8 @@ import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE
 import static com.qantium.uisteps.allure.tests.listeners.Event.STEP_FAILED;
 import static com.qantium.uisteps.core.properties.UIStepsProperties.getProperty;
 import static com.qantium.uisteps.core.properties.UIStepsProperty.USER_DIR;
+import static ru.yandex.qatools.allure.model.Status.BROKEN;
+import static ru.yandex.qatools.allure.model.Status.FAILED;
 
 /**
  * Created by Anton Solyankin
@@ -46,7 +47,7 @@ public class CatchErrors extends EventHandler {
             lastStep.setStatus(BROKEN);
         }
 
-        File file = new File(System.getProperty("user.dir") + getProperty(ALLURE_HOME_DIR) + "/error_message-" + uid + ".txt");
+        File file = new File(getProperty(USER_DIR)+ getProperty(ALLURE_HOME_DIR) + "/error_message-" + uid + ".txt");
 
         try {
             Files.createParentDirs(file);

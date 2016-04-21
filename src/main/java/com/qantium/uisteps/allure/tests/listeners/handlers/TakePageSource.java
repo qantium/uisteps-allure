@@ -4,11 +4,6 @@ import com.google.common.io.Files;
 import com.qantium.uisteps.allure.tests.listeners.Event;
 import com.qantium.uisteps.allure.tests.listeners.Meta;
 import com.qantium.uisteps.core.lifecycle.MetaInfo;
-
-import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.*;
-import static com.qantium.uisteps.core.properties.UIStepsProperties.*;
-import static com.qantium.uisteps.core.properties.UIStepsProperty.*;
-
 import ru.yandex.qatools.allure.model.Attachment;
 import ru.yandex.qatools.allure.model.Step;
 
@@ -16,6 +11,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE_HOME_DIR;
+import static com.qantium.uisteps.core.properties.UIStepsProperties.*;
+import static com.qantium.uisteps.core.properties.UIStepsProperty.*;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 
@@ -57,7 +55,8 @@ public class TakePageSource extends EventHandler {
 
         UUID uid = UUID.randomUUID();
         String pageSource = getListener().getTest().inOpenedBrowser().getDriver().getPageSource();
-        File file = new File(getProperty(USER_DIR) + getProperty(ALLURE_HOME_DIR) + "/page_source-" + uid + ".html");
+        String dir = getProperty(USER_DIR) + getProperty(ALLURE_HOME_DIR);
+        File file = new File(dir + "/page_source-" + uid + ".html");
 
         try {
             Files.createParentDirs(file);

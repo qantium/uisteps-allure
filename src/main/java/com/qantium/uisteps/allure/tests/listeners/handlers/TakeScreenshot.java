@@ -1,10 +1,7 @@
 package com.qantium.uisteps.allure.tests.listeners.handlers;
 
-import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.*;
 import com.qantium.uisteps.allure.tests.listeners.Event;
-import static com.qantium.uisteps.allure.tests.listeners.Meta.*;
 import com.qantium.uisteps.core.lifecycle.MetaInfo;
-import static com.qantium.uisteps.core.properties.UIStepsProperty.*;
 import com.qantium.uisteps.core.screenshots.Screenshot;
 import ru.yandex.qatools.allure.model.Attachment;
 import ru.yandex.qatools.allure.model.Step;
@@ -12,7 +9,11 @@ import ru.yandex.qatools.allure.model.Step;
 import java.util.List;
 import java.util.UUID;
 
+import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE_HOME_DIR;
+import static com.qantium.uisteps.allure.tests.listeners.Meta.ATTACH_SCREENSHOT;
+import static com.qantium.uisteps.allure.tests.listeners.Meta.LISTEN;
 import static com.qantium.uisteps.core.properties.UIStepsProperties.getProperty;
+import static com.qantium.uisteps.core.properties.UIStepsProperty.*;
 import static com.qantium.uisteps.core.properties.UIStepsProperty.USER_DIR;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 

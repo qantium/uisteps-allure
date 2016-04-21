@@ -1,11 +1,11 @@
 package com.qantium.uisteps.allure.tests.listeners.handlers;
 
 import com.qantium.uisteps.allure.tests.listeners.Event;
-import static com.qantium.uisteps.allure.tests.listeners.Event.*;
 import com.qantium.uisteps.core.lifecycle.MetaInfo;
 import ru.yandex.qatools.allure.model.Step;
 import ru.yandex.qatools.allure.model.TestCaseResult;
 
+import static com.qantium.uisteps.allure.tests.listeners.Event.TEST_FINISHED;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**

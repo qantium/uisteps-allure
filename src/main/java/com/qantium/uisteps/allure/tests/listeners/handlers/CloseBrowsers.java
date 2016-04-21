@@ -1,7 +1,8 @@
 package com.qantium.uisteps.allure.tests.listeners.handlers;
 
 import com.qantium.uisteps.allure.tests.listeners.Event;
-import static com.qantium.uisteps.allure.tests.listeners.Event.*;
+
+import static com.qantium.uisteps.allure.tests.listeners.Event.TEST_FINISHED;
 
 /**
  * Created by Anton Solyankin
