@@ -30,7 +30,7 @@ public class LogTests extends EventHandler {
 
     private List<String> log = new ArrayList();
     private Charset UTF_8 = Charset.forName("UTF-8");
-   private String dir = getProperty(USER_DIR) + getProperty(ALLURE_HOME_DIR);
+    private String dir = getProperty(USER_DIR) + getProperty(ALLURE_HOME_DIR);
 
     public LogTests() {
         super(new Event[]{TEST_STARTED, TEST_FINISHED, STEP_STARTED, STEP_FAILED});
@@ -170,13 +170,13 @@ public class LogTests extends EventHandler {
 
         if (cause != null) {
             log.add("CAUSE: " + cause.getMessage());
+            error = cause;
+        }
+        StackTraceElement[] stackTrace = error.getStackTrace();
+        log.add("STACKTRACE: ");
 
-            StackTraceElement[] stackTrace = cause.getStackTrace();
-            log.add("STACKTRACE: ");
-
-            for (StackTraceElement stackTraceElement : stackTrace) {
-                log.add("> " + stackTraceElement);
-            }
+        for (StackTraceElement stackTraceElement : stackTrace) {
+            log.add("> " + stackTraceElement);
         }
     }
 }

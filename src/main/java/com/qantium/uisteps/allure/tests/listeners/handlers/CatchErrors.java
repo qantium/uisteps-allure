@@ -23,6 +23,7 @@ import static ru.yandex.qatools.allure.model.Status.FAILED;
 public class CatchErrors extends EventHandler {
 
     private Step lastStep;
+    private String dir = getProperty(USER_DIR) + getProperty(ALLURE_HOME_DIR);
 
     public CatchErrors() {
         super(new Event[]{STEP_FAILED});
@@ -47,7 +48,7 @@ public class CatchErrors extends EventHandler {
             lastStep.setStatus(BROKEN);
         }
 
-        File file = new File(getProperty(USER_DIR)+ getProperty(ALLURE_HOME_DIR) + "/error_message-" + uid + ".txt");
+        File file = new File(dir, "/error_message-" + uid + ".txt");
 
         try {
             Files.createParentDirs(file);
@@ -67,30 +68,31 @@ public class CatchErrors extends EventHandler {
 
         Throwable cause = error.getCause();
         if (cause != null) {
-
-            file = new File(getProperty(USER_DIR) + getProperty(ALLURE_HOME_DIR) + "/error_cause-" + uid + ".txt");
-
-            try {
-                Files.createParentDirs(file);
-                StackTraceElement[] stackTrace = cause.getStackTrace();
-
-                for (StackTraceElement stackTraceElement : stackTrace) {
-                    Files.write(stackTraceElement.toString().getBytes(), file);
-                }
-            } catch (IOException ex) {
-                throw new RuntimeException("Cannot save error!", ex);
-            }
-            size = file.length();
-
-            Attachment errorCause = new Attachment();
-            errorCause.withSource("error_cause-" + uid + ".txt")
-                    .withType("text/plain")
-                    .withTitle("error cause")
-                    .withSize((int) size);
-
-
-            attachments.add(errorCause);
+            error = cause;
         }
+        file = new File(dir, "/error_cause-" + uid + ".txt");
+
+        try {
+            Files.createParentDirs(file);
+            StackTraceElement[] stackTrace = error.getStackTrace();
+
+            for (StackTraceElement stackTraceElement : stackTrace) {
+                Files.write(stackTraceElement.toString().getBytes(), file);
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException("Cannot save error!", ex);
+        }
+        size = file.length();
+
+        Attachment errorCause = new Attachment();
+        errorCause.withSource("error_cause-" + uid + ".txt")
+                .withType("text/plain")
+                .withTitle("error cause")
+                .withSize((int) size);
+
+
+        attachments.add(errorCause);
+
         return error;
     }
 }
