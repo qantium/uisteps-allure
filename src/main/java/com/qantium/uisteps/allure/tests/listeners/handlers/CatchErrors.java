@@ -6,7 +6,7 @@ import ru.yandex.qatools.allure.model.Attachment;
 import ru.yandex.qatools.allure.model.Step;
 
 import java.io.File;
-import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,6 +24,7 @@ public class CatchErrors extends EventHandler {
 
     private Step lastStep;
     private String dir = getProperty(USER_DIR) + getProperty(ALLURE_HOME_DIR);
+    private Charset UTF_8 = Charset.forName("UTF-8");
 
     public CatchErrors() {
         super(new Event[]{STEP_FAILED});
@@ -53,7 +54,7 @@ public class CatchErrors extends EventHandler {
         try {
             Files.createParentDirs(file);
             Files.write(error.getMessage().getBytes(), file);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             throw new RuntimeException("Cannot save error!", ex);
         }
         long size = file.length();
@@ -66,32 +67,29 @@ public class CatchErrors extends EventHandler {
 
         attachments.add(errorMessage);
 
-        Throwable cause = error.getCause();
-        if (cause != null) {
-            error = cause;
-        }
-        file = new File(dir, "/error_cause-" + uid + ".txt");
+        file = new File(dir, "/error_stacktrace-" + uid + ".txt");
 
         try {
             Files.createParentDirs(file);
             StackTraceElement[] stackTrace = error.getStackTrace();
 
+
             for (StackTraceElement stackTraceElement : stackTrace) {
-                Files.write(stackTraceElement.toString().getBytes(), file);
+                Files.append(stackTraceElement + "\n", file, UTF_8);
             }
-        } catch (IOException ex) {
-            throw new RuntimeException("Cannot save error!", ex);
+        } catch (Exception ex) {
+            throw new RuntimeException("Cannot save stacktrace!", ex);
         }
         size = file.length();
 
-        Attachment errorCause = new Attachment();
-        errorCause.withSource("error_cause-" + uid + ".txt")
+        Attachment stacktrace = new Attachment();
+        stacktrace.withSource("error_stacktrace-" + uid + ".txt")
                 .withType("text/plain")
-                .withTitle("error cause")
+                .withTitle("error stacktrace")
                 .withSize((int) size);
 
 
-        attachments.add(errorCause);
+        attachments.add(stacktrace);
 
         return error;
     }

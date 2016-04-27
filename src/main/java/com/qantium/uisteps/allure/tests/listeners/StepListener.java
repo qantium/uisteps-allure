@@ -13,6 +13,7 @@ import ru.yandex.qatools.allure.storages.StepStorage;
 import ru.yandex.qatools.allure.storages.TestCaseStorage;
 import ru.yandex.qatools.allure.storages.TestSuiteStorage;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.*;
 

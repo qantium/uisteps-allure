@@ -25,7 +25,7 @@ public class TakeScreenshot extends EventHandler {
     private Step lastStep;
 
     public TakeScreenshot() {
-        super(SCREENSHOTS_TAKE.toString());
+        super(SCREENSHOTS_TAKE);
     }
 
     public boolean needsOn(Event event) {

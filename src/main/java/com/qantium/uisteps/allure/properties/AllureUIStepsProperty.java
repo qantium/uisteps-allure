@@ -10,26 +10,27 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 public enum AllureUIStepsProperty implements IUIStepsProperty {
 
     ALLURE_HOME_DIR("/target/site/allure-maven-plugin/data"),
-
-    ALLURE_LOG_DIR(ALLURE_HOME_DIR.getDefaultValue()),
     ALLURE_LOG_ATTACH("true");
 
-    private String defaultValue = "";
+    private final String defaultValue;
 
     AllureUIStepsProperty(String defaultValue) {
+        String key = this.toString();
+
+        if(isEmpty(System.getProperty(key)) && !isEmpty(defaultValue)) {
+            System.setProperty(key, defaultValue);
+        }
+
         this.defaultValue = defaultValue;
     }
 
     AllureUIStepsProperty() {
+        this("");
     }
 
     @Override
     public String getDefaultValue() {
-        if (isEmpty(defaultValue)) {
-            return System.getProperty(this.toString());
-        } else {
-            return defaultValue;
-        }
+        return defaultValue;
     }
 
     @Override

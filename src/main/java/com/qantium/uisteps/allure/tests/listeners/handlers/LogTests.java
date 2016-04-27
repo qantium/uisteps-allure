@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import ru.yandex.qatools.allure.model.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ import java.util.UUID;
 
 import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE_HOME_DIR;
 import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE_LOG_ATTACH;
-import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE_LOG_DIR;
 import static com.qantium.uisteps.allure.tests.listeners.Event.*;
 import static com.qantium.uisteps.core.properties.UIStepsProperties.*;
 import static com.qantium.uisteps.core.properties.UIStepsProperty.*;
@@ -77,7 +75,11 @@ public class LogTests extends EventHandler {
                 Files.append(line + "\n", logFile, UTF_8);
                 logger.info(line);
             }
-        } catch (IOException ex) {
+
+            for(String line :Files.readLines(logFile, UTF_8)) {
+                logger.info(line);
+            }
+        } catch (Exception ex) {
             throw new RuntimeException("Cannot write log!", ex);
         }
     }
@@ -85,18 +87,19 @@ public class LogTests extends EventHandler {
     private void attachLog() {
         if ("true".equals(getProperty(ALLURE_LOG_ATTACH))) {
             UUID uid = UUID.randomUUID();
-            File file = new File(dir, "log-" + uid + ".log");
+            String fileName = "log-" + uid + ".log";
+            File file = new File(dir, fileName);
             try {
                 for (String line : log) {
                     Files.append(line + "\n", file, UTF_8);
                 }
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 throw new RuntimeException("Cannot attach log!", ex);
             }
 
             long size = file.length();
             Attachment attachment = new Attachment();
-            attachment.withSource("log-" + uid + ".log")
+            attachment.withSource(fileName)
                     .withType("text/plain")
                     .withTitle("log")
                     .withSize((int) size);
@@ -166,17 +169,11 @@ public class LogTests extends EventHandler {
         Throwable error = getListener().getError();
         log.add("ERROR: " + error.getMessage());
 
-        Throwable cause = error.getCause();
-
-        if (cause != null) {
-            log.add("CAUSE: " + cause.getMessage());
-            error = cause;
-        }
         StackTraceElement[] stackTrace = error.getStackTrace();
         log.add("STACKTRACE: ");
 
         for (StackTraceElement stackTraceElement : stackTrace) {
-            log.add("> " + stackTraceElement);
+            log.add("    > " + stackTraceElement);
         }
     }
 }

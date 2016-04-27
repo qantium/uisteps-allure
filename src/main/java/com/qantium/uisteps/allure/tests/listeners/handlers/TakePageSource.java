@@ -25,7 +25,7 @@ public class TakePageSource extends EventHandler {
     private Step lastStep;
 
     public TakePageSource() {
-        super(SOURCE_TAKE.toString());
+        super(SOURCE_TAKE);
     }
 
     public boolean needsOn(Event event) {

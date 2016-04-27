@@ -3,6 +3,7 @@ package com.qantium.uisteps.allure.tests.listeners.handlers;
 import com.qantium.uisteps.allure.tests.listeners.Event;
 import com.qantium.uisteps.allure.tests.listeners.StepListener;
 import com.qantium.uisteps.core.lifecycle.Execute;
+import com.qantium.uisteps.core.properties.IUIStepsProperty;
 import com.qantium.uisteps.core.properties.UIStepsProperties;
 
 import java.util.HashSet;
@@ -23,7 +24,7 @@ public abstract class EventHandler {
         this.events.addAll(asList(events));
     }
 
-    public EventHandler(String property) {
+    public EventHandler(IUIStepsProperty property) {
         String[] executions = UIStepsProperties.getProperty(property).split(",");
 
         for (String execution : executions) {
