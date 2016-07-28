@@ -14,4 +14,5 @@ public class BrowserFactory extends com.qantium.uisteps.core.browser.factory.Bro
         browser.setDriver(driver);
         return browser;
     }
+  
 }

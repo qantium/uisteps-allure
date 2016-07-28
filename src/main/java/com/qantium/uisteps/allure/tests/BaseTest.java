@@ -3,6 +3,8 @@ package com.qantium.uisteps.allure.tests;
 import com.qantium.uisteps.allure.tests.listeners.StepListener;
 import com.qantium.uisteps.allure.tests.listeners.handlers.*;
 import com.qantium.uisteps.allure.user.User;
+import com.qantium.uisteps.core.screenshots.IPhotographer;
+import com.qantium.uisteps.core.screenshots.Photographer;
 import ru.yandex.qatools.allure.Allure;
 
 
@@ -30,6 +32,10 @@ public class BaseTest extends User {
 //        }
 
         Allure.LIFECYCLE.addListener(listener);
+    }
+
+    public IPhotographer getPhotographer() {
+        return new Photographer(getDriver());
     }
 
     public StepListener getListener() {

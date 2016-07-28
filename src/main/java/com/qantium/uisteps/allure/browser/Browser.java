@@ -12,12 +12,9 @@ import com.qantium.uisteps.core.browser.pages.elements.alert.AuthenticationAlert
 import com.qantium.uisteps.core.browser.pages.elements.alert.ConfirmAlert;
 import com.qantium.uisteps.core.browser.pages.elements.alert.PromtAlert;
 import com.qantium.uisteps.core.screenshots.Ignored;
-import com.qantium.uisteps.core.screenshots.Photographer;
 import com.qantium.uisteps.core.screenshots.Screenshot;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import ru.yandex.qatools.allure.annotations.Step;
-import ru.yandex.qatools.ashot.coordinates.Coords;
 
 
 /**
@@ -37,8 +34,8 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
 
     @Step("Open {0}")
     @Override
-    public <T extends Page> T openPage(T page) {
-        return super.openPage(page);
+    public <T extends Page> T open(T page) {
+        return super.open(page);
     }
 
     @Step
@@ -49,8 +46,8 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
 
     @Step
     @Override
-    public void deleteCookieNamed(String name) {
-        super.deleteCookieNamed(name);
+    public void deleteCookie(String name) {
+        super.deleteCookie(name);
     }
 
     @Step
@@ -401,24 +398,6 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
     }
 
     //Screenshots
-    @Step
-    @Override
-    public Photographer inScreenshotIgnoring(By... locators) {
-        return super.inScreenshotIgnoring(locators);
-    }
-
-    @Step
-    @Override
-    public Photographer inScreenshotIgnoring(UIElement... elements) {
-        return super.inScreenshotIgnoring(elements);
-    }
-
-    @Step
-    @Override
-    public Photographer inScreenshotIgnoring(Coords... areas) {
-        return super.inScreenshotIgnoring(areas);
-    }
-
     @Override
     public Screenshot takeScreenshot() {
         Screenshot screenshot = super.takeScreenshot();

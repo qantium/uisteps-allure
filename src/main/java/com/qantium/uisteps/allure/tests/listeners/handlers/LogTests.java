@@ -17,8 +17,8 @@ import java.util.UUID;
 import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE_HOME_DIR;
 import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE_LOG_ATTACH;
 import static com.qantium.uisteps.allure.tests.listeners.Event.*;
-import static com.qantium.uisteps.core.properties.UIStepsProperties.*;
-import static com.qantium.uisteps.core.properties.UIStepsProperty.*;
+import static com.qantium.uisteps.core.properties.UIStepsProperties.getProperty;
+import static com.qantium.uisteps.core.properties.UIStepsProperty.USER_DIR;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
@@ -63,7 +63,8 @@ public class LogTests extends EventHandler {
 
 
     private void writeLog() {
-        Logger logger = LoggerFactory.getLogger(LogTests.class);
+        Logger logger = LoggerFactory.getLogger("Test log");
+        //PropertyConfigurator.configure("log4j.properties");
 
         try {
             File logFile = new File(dir, "tests.log");
@@ -74,9 +75,6 @@ public class LogTests extends EventHandler {
             for (String line : log) {
                 Files.append(line + "\n", logFile, UTF_8);
                 logger.info(line);
-            }
-
-            for(String line :Files.readLines(logFile, UTF_8)) {
                 logger.info(line);
             }
         } catch (Exception ex) {
@@ -168,7 +166,7 @@ public class LogTests extends EventHandler {
     private void logStepFailed() {
         Throwable error = getListener().getError();
         log.add("ERROR: " + error.getMessage());
-
+        log.add("CAUSE: " + error.getCause());
         StackTraceElement[] stackTrace = error.getStackTrace();
         log.add("STACKTRACE: ");
 

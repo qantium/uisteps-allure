@@ -2,6 +2,9 @@ package com.qantium.uisteps.allure.user;
 
 import com.qantium.uisteps.allure.browser.BrowserManager;
 import com.qantium.uisteps.allure.storage.Storage;
+import com.qantium.uisteps.core.browser.pages.UIElement;
+import com.qantium.uisteps.core.screenshots.Ignored;
+import com.qantium.uisteps.core.screenshots.Screenshot;
 
 /**
  * Created by Anton Solyankin
@@ -9,8 +12,7 @@ import com.qantium.uisteps.allure.storage.Storage;
 public class User extends com.qantium.uisteps.core.user.User {
 
     public User() {
-        setBrowserManager(new BrowserManager());
-        setStorage(new Storage());
+        super(new BrowserManager(), new Storage());
     }
 
     @Override

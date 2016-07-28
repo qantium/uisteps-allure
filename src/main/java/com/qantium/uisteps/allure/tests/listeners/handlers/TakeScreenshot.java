@@ -13,7 +13,7 @@ import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE
 import static com.qantium.uisteps.allure.tests.listeners.Meta.ATTACH_SCREENSHOT;
 import static com.qantium.uisteps.allure.tests.listeners.Meta.LISTEN;
 import static com.qantium.uisteps.core.properties.UIStepsProperties.getProperty;
-import static com.qantium.uisteps.core.properties.UIStepsProperty.*;
+import static com.qantium.uisteps.core.properties.UIStepsProperty.SCREENSHOTS_TAKE;
 import static com.qantium.uisteps.core.properties.UIStepsProperty.USER_DIR;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -42,7 +42,7 @@ public class TakeScreenshot extends EventHandler {
                 && (this.lastStep == null || !lastStep.equals(this.lastStep))
                 && !"false".equals(listenMeta)
                 && !"false".equals(attachScreenShot)
-                && getListener().getTest().getBrowserManager().hasAny()
+                && getListener().getTest().hasAnyBrowser()
                 && getListener().getTest().inOpenedBrowser().isAlive();
     }
 
@@ -51,7 +51,7 @@ public class TakeScreenshot extends EventHandler {
         lastStep = getListener().getLastStep();
         UUID uid = UUID.randomUUID();
         String dir = getProperty(USER_DIR) + getProperty(ALLURE_HOME_DIR);
-        Screenshot screenshot = getListener().getTest().inOpenedBrowser().getPhotographer().takeScreenshot();
+        Screenshot screenshot = getListener().getTest().getPhotographer().takeScreenshot();
         long size = screenshot.toDir(dir).save("screenshot-" + uid + ".png").length();
         Attachment attachment = new Attachment();
         attachment.withSource("screenshot-" + uid + ".png")

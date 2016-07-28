@@ -4,8 +4,9 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-import static com.qantium.uisteps.core.properties.UIStepsProperties.*;
-import static com.qantium.uisteps.core.properties.UIStepsProperty.*;
+import static com.qantium.uisteps.core.properties.UIStepsProperties.getProperty;
+import static com.qantium.uisteps.core.properties.UIStepsProperty.RETRY_ATTEMPTS;
+import static com.qantium.uisteps.core.properties.UIStepsProperty.RETRY_DELAY;
 
 
 /**

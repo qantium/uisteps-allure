@@ -12,8 +12,9 @@ import java.io.IOException;
 import java.util.UUID;
 
 import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE_HOME_DIR;
-import static com.qantium.uisteps.core.properties.UIStepsProperties.*;
-import static com.qantium.uisteps.core.properties.UIStepsProperty.*;
+import static com.qantium.uisteps.core.properties.UIStepsProperties.getProperty;
+import static com.qantium.uisteps.core.properties.UIStepsProperty.SOURCE_TAKE;
+import static com.qantium.uisteps.core.properties.UIStepsProperty.USER_DIR;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 
@@ -41,7 +42,7 @@ public class TakePageSource extends EventHandler {
                 && (this.lastStep == null || !lastStep.equals(this.lastStep))
                 && !"false".equals(listenMeta)
                 && !"false".equals(attachSource)
-                && getListener().getTest().getBrowserManager().hasAny()
+                && getListener().getTest().hasAnyBrowser()
                 && getListener().getTest().inOpenedBrowser().isAlive();
     }
 
