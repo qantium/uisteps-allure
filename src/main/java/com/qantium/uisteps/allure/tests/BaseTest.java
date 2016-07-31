@@ -7,16 +7,22 @@ import com.qantium.uisteps.core.screenshots.IPhotographer;
 import com.qantium.uisteps.core.screenshots.Photographer;
 import ru.yandex.qatools.allure.Allure;
 
-
 /**
  * Created by Anton Solyankin
  */
 public class BaseTest extends User {
 
-    private final StepListener listener;
-
     public BaseTest() {
-        listener = new StepListener(this);
+        addListener(initListener());
+    }
+
+    private void addListener(StepListener listener) {
+        listener.getStepStorage().get().clear();
+        Allure.LIFECYCLE.addListener(listener);
+    }
+
+    protected StepListener initListener() {
+        StepListener listener = new StepListener(this);
 
         listener
                 .add(new CatchErrors())
@@ -30,15 +36,10 @@ public class BaseTest extends User {
 //        if (TestRailAdapter.getInstance().isDefined()) {
 //            listener.add(new ReportTestRail());
 //        }
-
-        Allure.LIFECYCLE.addListener(listener);
+        return listener;
     }
 
     public IPhotographer getPhotographer() {
         return new Photographer(getDriver());
-    }
-
-    public StepListener getListener() {
-        return listener;
     }
 }

@@ -51,6 +51,7 @@ public class TakeScreenshot extends EventHandler {
         lastStep = getListener().getLastStep();
         UUID uid = UUID.randomUUID();
         String dir = getProperty(USER_DIR) + getProperty(ALLURE_HOME_DIR);
+        //TODO: inOpenedBrowser().getPhotographer
         Screenshot screenshot = getListener().getTest().getPhotographer().takeScreenshot();
         long size = screenshot.toDir(dir).save("screenshot-" + uid + ".png").length();
         Attachment attachment = new Attachment();

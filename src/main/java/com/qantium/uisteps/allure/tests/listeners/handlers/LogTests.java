@@ -64,8 +64,6 @@ public class LogTests extends EventHandler {
 
     private void writeLog() {
         Logger logger = LoggerFactory.getLogger("Test log");
-        //PropertyConfigurator.configure("log4j.properties");
-
         try {
             File logFile = new File(dir, "tests.log");
             if (!logFile.exists()) {
@@ -74,7 +72,6 @@ public class LogTests extends EventHandler {
 
             for (String line : log) {
                 Files.append(line + "\n", logFile, UTF_8);
-                logger.info(line);
                 logger.info(line);
             }
         } catch (Exception ex) {

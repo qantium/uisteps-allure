@@ -181,6 +181,9 @@ public class StepListener extends LifecycleListener {
         return get(TestSuiteStorage.class, "testSuiteStorage");
     }
 
+    public Allure getAllure() {
+        return get(Allure.class, "LIFECYCLE");
+    }
 
     private <T> T get(Class<T> fieldType, String fieldName) {
         try {
