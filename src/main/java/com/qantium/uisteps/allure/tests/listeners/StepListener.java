@@ -1,11 +1,12 @@
 package com.qantium.uisteps.allure.tests.listeners;
 
 import com.qantium.uisteps.allure.tests.BaseTest;
-import com.qantium.uisteps.allure.tests.listeners.handlers.EventHandler;
+import com.qantium.uisteps.allure.tests.listeners.handlers.*;
 import com.qantium.uisteps.core.lifecycle.MetaInfo;
 import ru.yandex.qatools.allure.Allure;
 import ru.yandex.qatools.allure.events.*;
 import ru.yandex.qatools.allure.experimental.LifecycleListener;
+import ru.yandex.qatools.allure.experimental.ListenersNotifier;
 import ru.yandex.qatools.allure.model.Step;
 import ru.yandex.qatools.allure.model.TestCaseResult;
 import ru.yandex.qatools.allure.model.TestSuiteResult;
@@ -17,7 +18,6 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 import static com.qantium.uisteps.allure.tests.listeners.Event.*;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Created by Anton Solyankin
@@ -29,13 +29,33 @@ public class StepListener extends LifecycleListener {
     private Set<Step> steps = new HashSet();
     private TestSuiteResult testSuite;
     private TestCaseResult testCase;
-    private final BaseTest test;
+    private BaseTest test;
     private boolean stepIsFailed;
     private Throwable error;
 
-    public StepListener(BaseTest test) {
-        this.test = test;
+    public StepListener() {
         testCase = getTestStorage().get();
+        init();
+    }
+
+    public StepListener set(BaseTest test) {
+        this.test = test;
+        return this;
+    }
+
+    public void init() {
+        ListenersNotifier notifier = getNotifier();
+        List<LifecycleListener> listeners = notifier.getListeners();
+        if (listeners.size() != 0) {
+            testSuite = ((StepListener) listeners.get(0)).getTestSuite();
+        }
+        listeners.clear();
+        add(new TakeScreenshot());
+        add(new TakePageSource());
+        add(new CloseBrowsers());
+        add(new CleanTitles());
+        add(new LogTests());
+        listeners.add(this);
     }
 
     public BaseTest getTest() {
@@ -51,17 +71,7 @@ public class StepListener extends LifecycleListener {
     }
 
     public TestSuiteResult getTestSuite() {
-        if (testSuite == null) {
-            Iterator<Map.Entry<String, TestSuiteResult>> iterator = getSuiteStorage().getStartedSuites().iterator();
-            while (iterator.hasNext()) {
-                testSuite = iterator.next().getValue();
-            }
-        }
         return testSuite;
-    }
-
-    public void setTestSuite(TestSuiteResult testSuite) {
-        this.testSuite = testSuite;
     }
 
     public Set<Step> getSteps() {
@@ -80,6 +90,9 @@ public class StepListener extends LifecycleListener {
         if (event instanceof TestSuiteStartedEvent) {
             TestSuiteStartedEvent suiteStartedEvent = (TestSuiteStartedEvent) event;
             String testSuiteUID = suiteStartedEvent.getUid();
+
+            for (Map.Entry<String, TestSuiteResult> entry : getSuiteStorage().getStartedSuites()) {
+            }
             testSuite = getSuiteStorage().get(testSuiteUID);
             fire(SUITE_STARTED);
         }
@@ -132,25 +145,6 @@ public class StepListener extends LifecycleListener {
         }
     }
 
-    public void setTitleTo(Step step) {
-        if (step != null) {
-            String lastStepTitle = step.getTitle();
-
-            if (!isEmpty(step.getTitle())) {
-                step.setTitle(new MetaInfo(lastStepTitle).getTitleWithoutMeta());
-            }
-        }
-    }
-
-    private void setTitleToTest() {
-        TestCaseResult test = getTestStorage().get();
-        String lastStepTitle = test.getTitle();
-
-        if (!isEmpty(test.getTitle())) {
-            test.setTitle(new MetaInfo(lastStepTitle).getTitleWithoutMeta());
-        }
-    }
-
     protected void fire(Event event) {
         Exception exception = null;
         EventHandler failedHandler = null;
@@ -183,6 +177,10 @@ public class StepListener extends LifecycleListener {
 
     public Allure getAllure() {
         return get(Allure.class, "LIFECYCLE");
+    }
+
+    public ListenersNotifier getNotifier() {
+        return get(ListenersNotifier.class, "notifier");
     }
 
     private <T> T get(Class<T> fieldType, String fieldName) {

@@ -5,6 +5,7 @@ import com.qantium.uisteps.allure.tests.listeners.Event;
 import com.qantium.uisteps.core.lifecycle.MetaInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.yandex.qatools.allure.Allure;
 import ru.yandex.qatools.allure.model.*;
 
 import java.io.File;
@@ -65,13 +66,7 @@ public class LogTests extends EventHandler {
     private void writeLog() {
         Logger logger = LoggerFactory.getLogger("Test log");
         try {
-            File logFile = new File(dir, "tests.log");
-            if (!logFile.exists()) {
-                Files.createParentDirs(logFile);
-            }
-
             for (String line : log) {
-                Files.append(line + "\n", logFile, UTF_8);
                 logger.info(line);
             }
         } catch (Exception ex) {
@@ -85,6 +80,9 @@ public class LogTests extends EventHandler {
             String fileName = "log-" + uid + ".log";
             File file = new File(dir, fileName);
             try {
+                if (!file.exists()) {
+                    Files.createParentDirs(file);
+                }
                 for (String line : log) {
                     Files.append(line + "\n", file, UTF_8);
                 }

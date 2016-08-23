@@ -51,6 +51,9 @@ public class RetryRule implements TestRule {
                         break;
                     } catch (Throwable ex) {
                         counter++;
+                        if(counter > attempts) {
+                            throw ex;
+                        }
                         delay();
                     }
                 }
