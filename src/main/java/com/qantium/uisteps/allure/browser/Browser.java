@@ -3,10 +3,7 @@ package com.qantium.uisteps.allure.browser;
 import com.qantium.uisteps.allure.storage.Storage;
 import com.qantium.uisteps.core.browser.pages.Page;
 import com.qantium.uisteps.core.browser.pages.UIElement;
-import com.qantium.uisteps.core.browser.pages.elements.CheckBox;
-import com.qantium.uisteps.core.browser.pages.elements.FileInput;
-import com.qantium.uisteps.core.browser.pages.elements.RadioButtonGroup;
-import com.qantium.uisteps.core.browser.pages.elements.Select;
+import com.qantium.uisteps.core.browser.pages.elements.*;
 import com.qantium.uisteps.core.browser.pages.elements.alert.Alert;
 import com.qantium.uisteps.core.browser.pages.elements.alert.AuthenticationAlert;
 import com.qantium.uisteps.core.browser.pages.elements.alert.ConfirmAlert;
@@ -147,19 +144,19 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
     //Elements
     @Step
     @Override
-    public void clear(UIElement input) {
+    public void clear(TextField input) {
         super.clear(input);
     }
 
     @Override
     @Step("Type into \"{0}\" value \"{1}\"")
-    public void typeInto(UIElement input, Object text) {
+    public void typeInto(TextField input, Object text) {
         super.typeInto(input, text);
     }
 
     @Override
     @Step("Enter into \"{0}\" value \"{1}\"")
-    public void enterInto(UIElement input, Object text) {
+    public void enterInto(TextField input, Object text) {
         super.enterInto(input, text);
     }
 
