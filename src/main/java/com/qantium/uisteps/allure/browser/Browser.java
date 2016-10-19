@@ -4,6 +4,7 @@ import com.qantium.uisteps.allure.storage.Storage;
 import com.qantium.uisteps.core.browser.pages.Page;
 import com.qantium.uisteps.core.browser.pages.UIElement;
 import com.qantium.uisteps.core.browser.pages.elements.*;
+import com.qantium.uisteps.core.browser.pages.elements.Select.Option;
 import com.qantium.uisteps.core.browser.pages.elements.alert.Alert;
 import com.qantium.uisteps.core.browser.pages.elements.alert.AuthenticationAlert;
 import com.qantium.uisteps.core.browser.pages.elements.alert.ConfirmAlert;
@@ -351,7 +352,7 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
     //Select
     @Step("Select \"{0}\"")
     @Override
-    public void select(Select.Option option) {
+    public void select(Option option) {
         super.select(option);
     }
 
@@ -363,28 +364,28 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
 
     @Step("Deselect \"{0}\"")
     @Override
-    public void deselect(Select.Option option) {
+    public void deselect(Option option) {
         super.deselect(option);
     }
 
     //Radio button
     @Step("Select \"{0}\"")
     @Override
-    public void select(RadioButtonGroup.RadioButton button) {
-        super.select(button);
+    public boolean select(RadioButton button) {
+        return super.select(button);
     }
 
     //CheckBox
     @Step("Select \"{0}\"")
     @Override
-    public void select(CheckBox checkBox) {
-        super.select(checkBox);
+    public boolean select(CheckBox checkBox) {
+        return super.select(checkBox);
     }
 
     @Step("Deselect \"{0}\"")
     @Override
-    public void deselect(CheckBox checkBox) {
-        super.deselect(checkBox);
+    public boolean deselect(CheckBox checkBox) {
+        return super.deselect(checkBox);
     }
 
     //FileInput
