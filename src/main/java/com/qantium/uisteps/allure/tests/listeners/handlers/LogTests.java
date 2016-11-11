@@ -35,10 +35,6 @@ public class LogTests extends EventHandler {
         super(new Event[]{TEST_STARTED, TEST_FINISHED, STEP_STARTED, STEP_FAILED});
     }
 
-    public boolean needsOn(Event event) {
-        return super.needsOn(event);
-    }
-
     @Override
     public List<String> handle(Event event) {
 

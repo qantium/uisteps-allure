@@ -296,8 +296,8 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
 
     @Step("Move mouse to \"{0}\" with offset ({1}; {2})")
     @Override
-    public void moveToElement(UIElement element, int xOffset, int yOffset) {
-        super.moveToElement(element, xOffset, yOffset);
+    public void moveMouseOver(UIElement element, int xOffset, int yOffset) {
+        super.moveMouseOver(element, xOffset, yOffset);
     }
 
     @Step("Move mouse over \"{0}\"")
