@@ -50,10 +50,11 @@ public class RetryRule implements TestRule {
                         base.evaluate();
                         break;
                     } catch (Throwable ex) {
-                        counter++;
                         if(counter > attempts) {
                             throw ex;
                         }
+                    } finally {
+                        counter++;
                         delay();
                     }
                 }

@@ -47,7 +47,7 @@ public class TakePageSource extends EventHandler {
     }
 
     @Override
-    public String handle(Event event) {
+    public String handle(Event event, Object... args) {
         lastStep = getListener().getLastStep();
         return attachPageSource();
     }

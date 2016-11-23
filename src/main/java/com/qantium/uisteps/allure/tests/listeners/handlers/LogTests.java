@@ -32,11 +32,11 @@ public class LogTests extends EventHandler {
     private String dir = getProperty(USER_DIR) + getProperty(ALLURE_HOME_DIR);
 
     public LogTests() {
-        super(new Event[]{TEST_STARTED, TEST_FINISHED, STEP_STARTED, STEP_FAILED});
+        super(new Event[]{TEST_STARTED, TEST_FINISHED, STEP_STARTED, ASSERT, STEP_FAILED});
     }
 
     @Override
-    public List<String> handle(Event event) {
+    public List<String> handle(Event event, Object... args) {
 
         switch (event) {
             case TEST_STARTED:
@@ -50,6 +50,10 @@ public class LogTests extends EventHandler {
                 break;
             case STEP_STARTED:
                 logStepStarted();
+                break;
+            case ASSERT:
+                String message = args[0].toString();
+                logAssert(message);
                 break;
             case STEP_FAILED:
                 logStepFailed();
@@ -154,15 +158,25 @@ public class LogTests extends EventHandler {
         log.add(title);
     }
 
+    private void logAssert(String message) {
+        String title = message;
+        String time = "00:00:00:000";
+
+        title = "[" + time + "] " + title;
+        log.add(title);
+    }
+
     private void logStepFailed() {
         Throwable error = getListener().getError();
-        log.add("ERROR: " + error.getMessage());
-        log.add("CAUSE: " + error.getCause());
-        StackTraceElement[] stackTrace = error.getStackTrace();
-        log.add("STACKTRACE: ");
+        if(error != null) {
+            log.add("ERROR: " + error.getMessage());
+            log.add("CAUSE: " + error.getCause());
+            StackTraceElement[] stackTrace = error.getStackTrace();
+            log.add("STACKTRACE: ");
 
-        for (StackTraceElement stackTraceElement : stackTrace) {
-            log.add("    > " + stackTraceElement);
+            for (StackTraceElement stackTraceElement : stackTrace) {
+                log.add("    > " + stackTraceElement);
+            }
         }
     }
 }

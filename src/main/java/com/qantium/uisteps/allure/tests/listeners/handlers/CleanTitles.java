@@ -6,7 +6,7 @@ import ru.yandex.qatools.allure.model.Step;
 import ru.yandex.qatools.allure.model.TestCaseResult;
 
 import static com.qantium.uisteps.allure.tests.listeners.Event.TEST_FINISHED;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Created by Anton Solyankin
@@ -18,7 +18,7 @@ public class CleanTitles extends EventHandler {
     }
 
     @Override
-    public Object handle(Event event) {
+    public Object handle(Event event, Object... args) {
         for (Step step : getListener().getSteps()) {
             clearTitleOf(step);
         }
@@ -28,14 +28,14 @@ public class CleanTitles extends EventHandler {
 
     private void clearTitleOf(Step step) {
         String stepTitle = step.getTitle();
-        if (!isEmpty(stepTitle)) {
+        if (isNotEmpty(stepTitle)) {
             step.setTitle(new MetaInfo(stepTitle).getTitleWithoutMeta());
         }
     }
 
     private void clearTitleOf(TestCaseResult test) {
         String testTitle = test.getTitle();
-        if (!isEmpty(testTitle)) {
+        if (isNotEmpty(testTitle)) {
             test.setTitle(new MetaInfo(testTitle).getTitleWithoutMeta());
         }
     }

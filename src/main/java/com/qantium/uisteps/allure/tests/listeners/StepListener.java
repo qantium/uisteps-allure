@@ -2,7 +2,7 @@ package com.qantium.uisteps.allure.tests.listeners;
 
 import com.qantium.uisteps.allure.tests.BaseTest;
 import com.qantium.uisteps.allure.tests.listeners.handlers.*;
-import com.qantium.uisteps.core.lifecycle.MetaInfo;
+import com.qantium.uisteps.allure.tests.listeners.handlers.CatchAssertions;
 import ru.yandex.qatools.allure.Allure;
 import ru.yandex.qatools.allure.events.*;
 import ru.yandex.qatools.allure.experimental.LifecycleListener;
@@ -50,11 +50,14 @@ public class StepListener extends LifecycleListener {
             testSuite = ((StepListener) listeners.get(0)).getTestSuite();
         }
         listeners.clear();
+
+        add(new CatchAssertions());
         add(new TakeScreenshot());
         add(new TakePageSource());
         add(new CloseBrowsers());
         add(new CleanTitles());
         add(new LogTests());
+
         listeners.add(this);
     }
 
@@ -90,9 +93,6 @@ public class StepListener extends LifecycleListener {
         if (event instanceof TestSuiteStartedEvent) {
             TestSuiteStartedEvent suiteStartedEvent = (TestSuiteStartedEvent) event;
             String testSuiteUID = suiteStartedEvent.getUid();
-
-            for (Map.Entry<String, TestSuiteResult> entry : getSuiteStorage().getStartedSuites()) {
-            }
             testSuite = getSuiteStorage().get(testSuiteUID);
             fire(SUITE_STARTED);
         }
@@ -145,13 +145,13 @@ public class StepListener extends LifecycleListener {
         }
     }
 
-    protected void fire(Event event) {
+    public void fire(Event event, Object... args) {
         Exception exception = null;
         EventHandler failedHandler = null;
         for (EventHandler handler : handlers) {
             if (handler.needsOn(event)) {
                 try {
-                    handler.handle(event);
+                    handler.handle(event, args);
                 } catch (Exception ex) {
                     failedHandler = handler;
                     exception = ex;

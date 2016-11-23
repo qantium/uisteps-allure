@@ -31,23 +31,24 @@ public abstract class EventHandler {
 
             switch (Execute.valueOf(execution.trim().toUpperCase())) {
                 case BEFORE_AND_AFTER_EACH_STEP:
-                    this.events.add(STEP_STARTED);
-                    this.events.add(STEP_FINISHED);
+                    events.add(STEP_STARTED);
+                    events.add(STEP_FINISHED);
                     break;
                 case BEFORE_EACH_STEP:
-                    this.events.add(STEP_STARTED);
+                    events.add(STEP_STARTED);
                     break;
                 case AFTER_EACH_STEP:
-                    this.events.add(STEP_FINISHED);
+                    events.add(STEP_FINISHED);
                     break;
                 case FOR_FAILURES:
-                    this.events.add(STEP_FAILED);
+                    events.add(ASSERT);
+                    events.add(STEP_FAILED);
                     break;
                 case TEST_STARTED:
-                    this.events.add(TEST_STARTED);
+                    events.add(TEST_STARTED);
                     break;
                 case TEST_FINISHED:
-                    this.events.add(TEST_FINISHED);
+                    events.add(TEST_FINISHED);
                     break;
             }
         }
@@ -65,5 +66,5 @@ public abstract class EventHandler {
         return events.contains(event);
     }
 
-    public abstract Object handle(Event event);
+    public abstract Object handle(Event event, Object... args);
 }

@@ -15,7 +15,7 @@ import static com.qantium.uisteps.allure.tests.listeners.Meta.LISTEN;
 import static com.qantium.uisteps.core.properties.UIStepsProperties.getProperty;
 import static com.qantium.uisteps.core.properties.UIStepsProperty.SCREENSHOTS_TAKE;
 import static com.qantium.uisteps.core.properties.UIStepsProperty.USER_DIR;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Created by Anton Solyankin
@@ -33,7 +33,7 @@ public class TakeScreenshot extends EventHandler {
         String attachScreenShot = "";
         Step lastStep = getListener().getLastStep();
 
-        if (lastStep != null && !isEmpty(lastStep.getTitle())) {
+        if (lastStep != null && isNotEmpty(lastStep.getTitle())) {
             MetaInfo meta = new MetaInfo(lastStep.getTitle());
             listenMeta = meta.get(LISTEN.toString());
             attachScreenShot = meta.get(ATTACH_SCREENSHOT.toString());
@@ -47,7 +47,7 @@ public class TakeScreenshot extends EventHandler {
     }
 
     @Override
-    public Screenshot handle(Event event) {
+    public Screenshot handle(Event event, Object... args) {
         lastStep = getListener().getLastStep();
         UUID uid = UUID.randomUUID();
         String dir = getProperty(USER_DIR) + getProperty(ALLURE_HOME_DIR);

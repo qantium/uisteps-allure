@@ -14,7 +14,7 @@ public class CloseBrowsers extends EventHandler {
     }
 
     @Override
-    public Object handle(Event event) {
+    public Object handle(Event event, Object... args) {
         closeBrowsers();
         return null;
     }
