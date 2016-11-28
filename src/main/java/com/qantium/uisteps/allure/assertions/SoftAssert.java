@@ -42,7 +42,7 @@ public class SoftAssert {
 
     }
 
-    protected void error(String message) {
+    public void error(String message) {
         getListener().fire(ASSERT, message);
         not(false);
     }

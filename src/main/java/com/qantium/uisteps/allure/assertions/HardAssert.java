@@ -14,7 +14,7 @@ public class HardAssert extends SoftAssert {
         super(listener);
     }
 
-    protected void error(String message) throws AssertionError {
+    public void error(String message) throws AssertionError {
         super.error(message);
         getListener().fire(STEP_FAILED, message);
     }

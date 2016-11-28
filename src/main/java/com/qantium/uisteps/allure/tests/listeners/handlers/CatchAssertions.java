@@ -55,7 +55,6 @@ public class CatchAssertions extends EventHandler {
                         break;
                     }
                 }
-
                 return message;
             default:
                 if (messages.length() > 0) {
@@ -63,7 +62,6 @@ public class CatchAssertions extends EventHandler {
                 }
                 return messages.toString();
         }
-
     }
 
     private void fail(Step step) {
@@ -71,7 +69,7 @@ public class CatchAssertions extends EventHandler {
     }
 
     private void skipRootStep(Iterator<Step> iterator) {
-        if(iterator.hasNext()) {
+        if (iterator.hasNext()) {
             iterator.next();
         }
     }
