@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.UUID;
 
 import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE_HOME_DIR;
-import static com.qantium.uisteps.core.properties.UIStepsProperties.getProperty;
 import static com.qantium.uisteps.core.properties.UIStepsProperty.SOURCE_TAKE;
 import static com.qantium.uisteps.core.properties.UIStepsProperty.USER_DIR;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -56,7 +55,7 @@ public class TakePageSource extends EventHandler {
 
         UUID uid = UUID.randomUUID();
         String pageSource = getListener().getTest().inOpenedBrowser().getDriver().getPageSource();
-        String dir = getProperty(USER_DIR) + getProperty(ALLURE_HOME_DIR);
+        String dir = USER_DIR.getValue() + ALLURE_HOME_DIR.getValue();
         File file = new File(dir + "/page_source-" + uid + ".html");
 
         try {

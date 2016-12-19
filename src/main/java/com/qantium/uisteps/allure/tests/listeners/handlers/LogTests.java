@@ -5,7 +5,6 @@ import com.qantium.uisteps.allure.tests.listeners.Event;
 import com.qantium.uisteps.core.lifecycle.MetaInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.yandex.qatools.allure.Allure;
 import ru.yandex.qatools.allure.model.*;
 
 import java.io.File;
@@ -18,7 +17,6 @@ import java.util.UUID;
 import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE_HOME_DIR;
 import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE_LOG_ATTACH;
 import static com.qantium.uisteps.allure.tests.listeners.Event.*;
-import static com.qantium.uisteps.core.properties.UIStepsProperties.getProperty;
 import static com.qantium.uisteps.core.properties.UIStepsProperty.USER_DIR;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -29,7 +27,7 @@ public class LogTests extends EventHandler {
 
     private List<String> log = new ArrayList();
     private Charset UTF_8 = Charset.forName("UTF-8");
-    private String dir = getProperty(USER_DIR) + getProperty(ALLURE_HOME_DIR);
+    private String dir = USER_DIR.getValue() + ALLURE_HOME_DIR.getValue();
 
     public LogTests() {
         super(new Event[]{TEST_STARTED, TEST_FINISHED, STEP_STARTED, ASSERT, STEP_FAILED});
@@ -75,7 +73,7 @@ public class LogTests extends EventHandler {
     }
 
     private void attachLog() {
-        if ("true".equals(getProperty(ALLURE_LOG_ATTACH))) {
+        if (ALLURE_LOG_ATTACH.isTrue()) {
             UUID uid = UUID.randomUUID();
             String fileName = "log-" + uid + ".log";
             File file = new File(dir, fileName);

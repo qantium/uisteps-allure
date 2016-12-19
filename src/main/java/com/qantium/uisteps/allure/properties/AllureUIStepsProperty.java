@@ -2,8 +2,6 @@ package com.qantium.uisteps.allure.properties;
 
 import com.qantium.uisteps.core.properties.IUIStepsProperty;
 
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-
 /**
  * Created by Anton Solyankin
  */
@@ -14,18 +12,12 @@ public enum AllureUIStepsProperty implements IUIStepsProperty {
 
     private final String defaultValue;
 
-    AllureUIStepsProperty(String defaultValue) {
-        String key = this.toString();
-
-        if(isEmpty(System.getProperty(key)) && !isEmpty(defaultValue)) {
-            System.setProperty(key, defaultValue);
-        }
-
-        this.defaultValue = defaultValue;
-    }
-
     AllureUIStepsProperty() {
         this("");
+    }
+
+    AllureUIStepsProperty(String defaultValue) {
+        this.defaultValue = defaultValue;
     }
 
     @Override
@@ -33,8 +25,4 @@ public enum AllureUIStepsProperty implements IUIStepsProperty {
         return defaultValue;
     }
 
-    @Override
-    public String toString() {
-        return name().toLowerCase().replace("_", ".");
-    }
 }

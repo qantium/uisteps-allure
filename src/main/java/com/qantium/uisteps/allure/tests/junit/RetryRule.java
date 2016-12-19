@@ -4,7 +4,6 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-import static com.qantium.uisteps.core.properties.UIStepsProperties.getProperty;
 import static com.qantium.uisteps.core.properties.UIStepsProperty.RETRY_ATTEMPTS;
 import static com.qantium.uisteps.core.properties.UIStepsProperty.RETRY_DELAY;
 
@@ -21,8 +20,8 @@ public class RetryRule implements TestRule {
 
     public RetryRule(JUnitTest test) {
         this.test = test;
-        attempts = Integer.parseInt(getProperty(RETRY_ATTEMPTS));
-        delay = Integer.parseInt(getProperty(RETRY_DELAY));
+        attempts = RETRY_ATTEMPTS.getIntValue();
+        delay = RETRY_DELAY.getIntValue();
     }
 
     public RetryRule(int attempts, int delay, JUnitTest test) {

@@ -4,7 +4,6 @@ import com.qantium.uisteps.allure.tests.listeners.Event;
 import com.qantium.uisteps.allure.tests.listeners.StepListener;
 import com.qantium.uisteps.core.lifecycle.Execute;
 import com.qantium.uisteps.core.properties.IUIStepsProperty;
-import com.qantium.uisteps.core.properties.UIStepsProperties;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,14 +17,14 @@ import static java.util.Arrays.asList;
 public abstract class EventHandler {
 
     private final Set<Event> events = new HashSet();
-    private StepListener listener ;
+    private StepListener listener;
 
     public EventHandler(Event[] events) {
         this.events.addAll(asList(events));
     }
 
     public EventHandler(IUIStepsProperty property) {
-        String[] executions = UIStepsProperties.getProperty(property).split(",");
+        String[] executions = property.getValue().split(",");
 
         for (String execution : executions) {
 
