@@ -13,10 +13,8 @@ import ru.yandex.qatools.allure.model.TestSuiteResult;
 import ru.yandex.qatools.allure.storages.StepStorage;
 import ru.yandex.qatools.allure.storages.TestCaseStorage;
 import ru.yandex.qatools.allure.storages.TestSuiteStorage;
-
 import java.lang.reflect.Field;
 import java.util.*;
-
 import static com.qantium.uisteps.allure.tests.listeners.Event.*;
 
 /**
@@ -113,6 +111,7 @@ public class StepListener extends LifecycleListener {
     @Override
     public void fire(TestCaseStartedEvent event) {
         fire(Event.TEST_STARTED);
+        System.out.println("============================================= Test: " + testCase);
     }
 
     @Override

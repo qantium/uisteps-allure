@@ -29,39 +29,43 @@ public class CatchAssertions extends EventHandler {
 
         switch (event) {
             case ASSERT:
-                String message = args[0].toString();
-                messages.append(message).append("; ");
-
-                Step step = getListener().getLastStep();
-                Step messageStep = new Step();
-                messageStep.setTitle(message);
-                fail(messageStep);
-
-                List<Step> steps = new ArrayList();
-                steps.add(messageStep);
-                step.setSteps(steps);
-                fail(step);
-
-                Deque<Step> stepStorage = getListener().getStepStorage().get();
-                Iterator<Step> iterator = stepStorage.iterator();
-
-                skipRootStep(iterator);
-
-                while (iterator.hasNext()) {
-                    Step parentStep = iterator.next();
-
-                    fail(parentStep);
-                    if (parentStep.getSteps().contains(step)) {
-                        break;
-                    }
-                }
-                return message;
+                return handleAssert(args);
             default:
                 if (messages.length() > 0) {
                     getListener().getTestCase().setStatus(FAILED);
                 }
                 return messages.toString();
         }
+    }
+
+    private String handleAssert(Object... args) {
+        String message = args[0].toString();
+        messages.append(message).append("; ");
+
+        Step step = getListener().getLastStep();
+        Step messageStep = new Step();
+        messageStep.setTitle(message);
+        fail(messageStep);
+
+        List<Step> steps = new ArrayList();
+        steps.add(messageStep);
+        step.setSteps(steps);
+        fail(step);
+
+        Deque<Step> stepStorage = getListener().getStepStorage().get();
+        Iterator<Step> iterator = stepStorage.iterator();
+
+        skipRootStep(iterator);
+
+        while (iterator.hasNext()) {
+            Step parentStep = iterator.next();
+
+            fail(parentStep);
+            if (parentStep.getSteps().contains(step)) {
+                break;
+            }
+        }
+        return message;
     }
 
     private void fail(Step step) {
