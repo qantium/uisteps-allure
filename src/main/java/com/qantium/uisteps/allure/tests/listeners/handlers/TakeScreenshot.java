@@ -27,6 +27,7 @@ public class TakeScreenshot extends EventHandler {
         super(SCREENSHOTS_TAKE);
     }
 
+    @Override
     public boolean needsOn(Event event) {
         String listenMeta = "";
         String attachScreenShot = "";

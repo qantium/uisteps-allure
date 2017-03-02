@@ -28,6 +28,7 @@ public class TakePageSource extends EventHandler {
         super(SOURCE_TAKE);
     }
 
+    @Override
     public boolean needsOn(Event event) {
         String listenMeta = "";
         String attachSource = "";
