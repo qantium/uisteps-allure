@@ -111,7 +111,6 @@ public class StepListener extends LifecycleListener {
     @Override
     public void fire(TestCaseStartedEvent event) {
         fire(Event.TEST_STARTED);
-        System.out.println("============================================= Test: " + testCase);
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.qantium.uisteps.allure.assertions;
 
 import com.qantium.uisteps.allure.tests.listeners.StepListener;
+import ru.yandex.qatools.allure.annotations.Step;
 
+import static com.qantium.uisteps.allure.tests.listeners.Event.ASSERT;
 import static com.qantium.uisteps.allure.tests.listeners.Event.STEP_FAILED;
 
 
@@ -14,8 +16,11 @@ public class HardAssert extends SoftAssert {
         super(listener);
     }
 
+    @Step("{0}")
     public void error(String message) throws AssertionError {
-        super.error(message);
         getListener().fire(STEP_FAILED, message);
+        not(false);
+        throw new AssertionError(message);
+
     }
 }

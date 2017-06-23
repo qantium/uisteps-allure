@@ -57,25 +57,29 @@ public class TakePageSource extends EventHandler {
         UUID uid = UUID.randomUUID();
         String pageSource = getListener().getTest().inOpenedBrowser().getDriver().getPageSource();
         String dir = USER_DIR.getValue() + ALLURE_HOME_DIR.getValue();
-        File file = new File(dir + "/page_source-" + uid + ".html");
+        File fileHtml = new File(dir + "/page_html-" + uid + ".html");
+        File fileTxt = new File(dir + "/page_source-" + uid + ".txt");
 
         try {
-            Files.createParentDirs(file);
-            Files.write(pageSource.getBytes(), file);
+            byte[] bytes = pageSource.getBytes();
+
+            Files.createParentDirs(fileHtml);
+            Files.write(bytes, fileHtml);
+            Files.write(bytes, fileTxt);
         } catch (IOException ex) {
-            throw new RuntimeException("Cannot save page source!", ex);
+            throw new RuntimeException("Cannot save page html!", ex);
         }
 
-        attach(file, "page html", "text/html", uid);
-        attach(file, "page source", "text/plain", uid);
+        attach(fileHtml, "page html", "text/html");
+        attach(fileTxt, "page source", "text/plain");
 
         return pageSource;
     }
 
-    private void attach(File file, String title, String type, UUID uid) {
+    private void attach(File file, String title, String type) {
         long size = file.length();
         Attachment attachment = new Attachment();
-        attachment.withSource("page_source-" + uid + ".html")
+        attachment.withSource(file.getName())
                 .withType(type)
                 .withTitle(title)
                 .withSize((int) size);
