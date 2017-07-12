@@ -17,8 +17,8 @@ public class HardAssert extends SoftAssert {
     }
 
     @Step("{0}")
-    public void error(String message) throws AssertionError {
-        getListener().fire(STEP_FAILED, message);
+    public void error(String message, Object... args) throws AssertionError {
+        getListener().fire(STEP_FAILED, message, args);
         not(false);
         throw new AssertionError(message);
 

@@ -17,7 +17,7 @@ public class SoftAssert {
         this.listener = listener;
     }
 
-    public void thatEqual(Object obj_1, Object obj_2, String message) {
+    public void thatEqual(Object obj_1, Object obj_2, String message, Object... args) {
 
         boolean condition = obj_1 == null && obj_2 == null;
 
@@ -25,27 +25,27 @@ public class SoftAssert {
             condition = obj_1.equals(obj_2);
         }
 
-        thatTrue(condition, message);
+        thatTrue(condition, message, args);
     }
 
-    public void thatFalse(boolean condition, String message) {
-        thatTrue(!condition, message);
+    public void thatFalse(boolean condition, String message, Object... args) {
+        thatTrue(!condition, message, args);
     }
 
-    public void thatTrue(boolean condition, String message) {
+    public void thatTrue(boolean condition, String message, Object... args) {
         if(isNot()) {
             condition = !condition;
         }
 
         if (!condition) {
-            error(message);
+            error(message, args);
         }
 
     }
 
     @Step("{0}")
-    public void error(String message) {
-        getListener().fire(ASSERT, message);
+    public void error(String message, Object... args) {
+        getListener().fire(ASSERT, message, args);
         not(false);
     }
 

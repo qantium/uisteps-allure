@@ -4,7 +4,7 @@
     <groupId>com.qantium</groupId>
     <artifactId>uisteps-allure</artifactId>
     <name>${project.artifactId}</name>
-    <version>4.1.9</version>
+    <version>4.1.10</version>
     <description>Allure extension for uisteps-core</description>
     <packaging>jar</packaging>
 

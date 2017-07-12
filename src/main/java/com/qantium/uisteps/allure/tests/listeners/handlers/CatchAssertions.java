@@ -26,7 +26,7 @@ public class CatchAssertions extends EventHandler {
 
         switch (event) {
             case ASSERT:
-                return handleAssert(args);
+                return handleAssert();
             default:
                 if (testIsFailed) {
                     getListener().getTestCase().setStatus(FAILED);
@@ -35,7 +35,7 @@ public class CatchAssertions extends EventHandler {
         }
     }
 
-    private Object handleAssert(Object... args) {
+    private Object handleAssert() {
         testIsFailed = true;
         Deque<Step> stepStorage = getListener().getStepStorage().get();
         Iterator<Step> iterator = stepStorage.iterator();
