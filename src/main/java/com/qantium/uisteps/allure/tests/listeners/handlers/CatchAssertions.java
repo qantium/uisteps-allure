@@ -6,8 +6,8 @@ import ru.yandex.qatools.allure.model.Step;
 import java.util.Deque;
 import java.util.Iterator;
 
-import static com.qantium.uisteps.allure.tests.listeners.Event.ASSERT;
-import static com.qantium.uisteps.allure.tests.listeners.Event.TEST_FINISHED;
+import static com.qantium.uisteps.allure.tests.listeners.Event.*;
+import static ru.yandex.qatools.allure.model.Status.BROKEN;
 import static ru.yandex.qatools.allure.model.Status.FAILED;
 
 /**
@@ -16,9 +16,10 @@ import static ru.yandex.qatools.allure.model.Status.FAILED;
 public class CatchAssertions extends EventHandler {
 
     private boolean testIsFailed;
+    private boolean testIsBroken;
 
     public CatchAssertions() {
-        super(new Event[]{ASSERT, TEST_FINISHED});
+        super(new Event[]{ASSERT, ASSERT_BROKEN, TEST_FINISHED});
     }
 
     @Override
@@ -26,17 +27,25 @@ public class CatchAssertions extends EventHandler {
 
         switch (event) {
             case ASSERT:
-                return handleAssert();
+            case ASSERT_BROKEN:
+                return handleAssert(event);
             default:
                 if (testIsFailed) {
                     getListener().getTestCase().setStatus(FAILED);
+                } else if (testIsBroken) {
+                    getListener().getTestCase().setStatus(BROKEN);
                 }
                 return null;
         }
     }
 
-    private Object handleAssert() {
-        testIsFailed = true;
+    private Object handleAssert(Event event) {
+        if (event == ASSERT) {
+            testIsFailed = true;
+        } else {
+            testIsBroken = true;
+        }
+
         Deque<Step> stepStorage = getListener().getStepStorage().get();
         Iterator<Step> iterator = stepStorage.iterator();
 
@@ -45,13 +54,17 @@ public class CatchAssertions extends EventHandler {
         while (iterator.hasNext()) {
             Step parentStep = iterator.next();
 
-            fail(parentStep);
+            fail(event, parentStep);
         }
         return null;
     }
 
-    private void fail(Step step) {
-        step.setStatus(FAILED);
+    private void fail(Event event, Step step) {
+        if (event == ASSERT) {
+            step.setStatus(FAILED);
+        } else if (step.getStatus() != FAILED) {
+            step.setStatus(BROKEN);
+        }
     }
 
     private void skipRootStep(Iterator<Step> iterator) {

@@ -11,7 +11,9 @@ public enum Event {
     TEST_FINISHED,
     SUITE_STARTED,
     SUITE_FINISHED,
-    ASSERT;
+    ASSERT,
+    ASSERT_PASSED,
+    ASSERT_BROKEN;
 
     @Override
     public String toString() {
