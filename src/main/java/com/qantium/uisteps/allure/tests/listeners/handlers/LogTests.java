@@ -30,7 +30,7 @@ public class LogTests extends EventHandler {
     private String dir = USER_DIR.getValue() + ALLURE_HOME_DIR.getValue();
 
     public LogTests() {
-        super(new Event[]{TEST_STARTED, TEST_FINISHED, STEP_STARTED, ASSERT, STEP_FAILED});
+        super(new Event[]{TEST_STARTED, TEST_FINISHED, STEP_STARTED, ASSERT, ASSERT_BROKEN, STEP_FAILED});
     }
 
     @Override
@@ -50,6 +50,7 @@ public class LogTests extends EventHandler {
                 logStepStarted();
                 break;
             case ASSERT:
+            case ASSERT_BROKEN:
                 String message = args[0].toString();
                 logAssert(message);
                 break;
@@ -122,17 +123,21 @@ public class LogTests extends EventHandler {
         }
 
         log.add(event + ": " + new SimpleDateFormat("hh:mm:ss").format(time));
-        log.add("TITLE: " + new MetaInfo(testTitle).getTitleWithoutMeta());
-        log.add("SUITE: " + suiteTitle);
 
-        if (event == TEST_STARTED) {
-            log.add("LABELS: ");
+        if (event == TEST_FINISHED) {
+
+            ArrayList<String> startedLog = new ArrayList<>();
+
+            startedLog.add("TITLE: " + new MetaInfo(testTitle).getTitleWithoutMeta());
+            startedLog.add("SUITE: " + suiteTitle);
+            startedLog.add("LABELS: ");
             for (Label label : testCase.getLabels()) {
                 if (!label.getName().equals("host") && !label.getName().equals("thread")) {
-                    log.add("> " + label.getName() + ": " + label.getValue());
+                    startedLog.add("> " + label.getName() + ": " + label.getValue());
                 }
             }
-        } else {
+            log.addAll(2, startedLog);
+
             log.add("STATUS: " + testCase.getStatus());
             long total = testCase.getStop() - testCase.getStart();
             log.add("TOTAL: " + new SimpleDateFormat("mm'm' ss's' SSS'ms'").format(total));
@@ -158,7 +163,7 @@ public class LogTests extends EventHandler {
 
     private void logAssert(String message) {
         String title = message;
-        String time = "00:00:00:000";
+        String time =  new SimpleDateFormat("hh:mm:ss:SSS").format(System.currentTimeMillis());
 
         title = "[" + time + "] " + title;
         log.add(title);
@@ -166,7 +171,7 @@ public class LogTests extends EventHandler {
 
     private void logStepFailed() {
         Throwable error = getListener().getError();
-        if(error != null) {
+        if (error != null) {
             log.add("ERROR: " + error.getMessage());
             log.add("CAUSE: " + error.getCause());
             StackTraceElement[] stackTrace = error.getStackTrace();

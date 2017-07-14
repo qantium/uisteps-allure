@@ -3,7 +3,6 @@ package com.qantium.uisteps.allure.assertions;
 import com.qantium.uisteps.allure.tests.listeners.StepListener;
 import ru.yandex.qatools.allure.annotations.Step;
 
-import static com.qantium.uisteps.allure.tests.listeners.Event.ASSERT;
 import static com.qantium.uisteps.allure.tests.listeners.Event.STEP_FAILED;
 
 
