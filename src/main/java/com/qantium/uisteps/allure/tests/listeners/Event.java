@@ -12,7 +12,6 @@ public enum Event {
     SUITE_STARTED,
     SUITE_FINISHED,
     ASSERT,
-    ASSERT_PASSED,
     ASSERT_BROKEN;
 
     @Override

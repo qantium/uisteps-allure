@@ -5,7 +5,6 @@ import ru.yandex.qatools.allure.annotations.Step;
 
 import static com.qantium.uisteps.allure.tests.listeners.Event.ASSERT;
 import static com.qantium.uisteps.allure.tests.listeners.Event.ASSERT_BROKEN;
-import static com.qantium.uisteps.allure.tests.listeners.Event.ASSERT_PASSED;
 
 /**
  * Created by Anton Solyankin
@@ -39,9 +38,7 @@ public class SoftAssert {
             condition = !condition;
         }
 
-        if (condition) {
-            passed(message, args);
-        } else {
+        if (!condition) {
             error(message, args);
         }
 
@@ -50,12 +47,6 @@ public class SoftAssert {
     @Step("{0}")
     public void error(String message, Object... args) {
         getListener().fire(ASSERT, message, args);
-        not(false);
-    }
-
-    @Step("{0}")
-    public void passed(String message, Object... args) {
-        getListener().fire(ASSERT_PASSED, message, args);
         not(false);
     }
 
