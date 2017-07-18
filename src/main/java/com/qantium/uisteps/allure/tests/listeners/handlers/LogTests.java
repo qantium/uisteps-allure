@@ -170,7 +170,6 @@ public class LogTests extends EventHandler {
     }
 
     private String getLevelSpace() {
-        System.out.println("******************************** " + getListener().getLastStep().getName() + ": " + getListener().getStepStorage().get().size());
         int level = getListener().getStepStorage().get().size() - 2;
         return StringUtils.repeat("    ", level);
     }
