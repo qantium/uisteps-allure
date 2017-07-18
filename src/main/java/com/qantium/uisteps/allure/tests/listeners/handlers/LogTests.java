@@ -3,8 +3,7 @@ package com.qantium.uisteps.allure.tests.listeners.handlers;
 import com.google.common.io.Files;
 import com.qantium.uisteps.allure.tests.listeners.Event;
 import com.qantium.uisteps.core.lifecycle.MetaInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 import ru.yandex.qatools.allure.model.*;
 
 import java.io.File;
@@ -13,6 +12,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Formatter;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE_HOME_DIR;
 import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE_LOG_ATTACH;
@@ -30,7 +33,7 @@ public class LogTests extends EventHandler {
     private String dir = USER_DIR.getValue() + ALLURE_HOME_DIR.getValue();
 
     public LogTests() {
-        super(new Event[]{TEST_STARTED, TEST_FINISHED, STEP_STARTED, ASSERT, ASSERT_BROKEN, STEP_FAILED});
+        super(new Event[]{TEST_STARTED, TEST_FINISHED, STEP_STARTED, STEP_FAILED});
     }
 
     @Override
@@ -49,11 +52,6 @@ public class LogTests extends EventHandler {
             case STEP_STARTED:
                 logStepStarted();
                 break;
-            case ASSERT:
-            case ASSERT_BROKEN:
-                String message = args[0].toString();
-                logAssert(message);
-                break;
             case STEP_FAILED:
                 logStepFailed();
                 break;
@@ -61,15 +59,26 @@ public class LogTests extends EventHandler {
         return log;
     }
 
-
     private void writeLog() {
-        Logger logger = LoggerFactory.getLogger("Test log");
-        try {
-            for (String line : log) {
-                logger.info(line);
-            }
-        } catch (Exception ex) {
-            throw new RuntimeException("Cannot write log!", ex);
+        Logger logger = Logger.getLogger(LogTests.class.getName());
+        logger.setUseParentHandlers(false);
+        ConsoleHandler ch = new ConsoleHandler();
+        ch.setFormatter(new LogFormatter());
+        logger.addHandler(ch);
+
+        for (String line : log) {
+            logger.info(line);
+        }
+    }
+
+    class LogFormatter extends Formatter {
+
+        @Override
+        public String format(LogRecord record) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("[").append(record.getLevel()).append("]").append(' ');
+            sb.append(record.getMessage()).append('\n');
+            return sb.toString();
         }
     }
 
@@ -146,7 +155,6 @@ public class LogTests extends EventHandler {
         log.add("------------------------------------------------------------------------------------------------------");
     }
 
-
     private void logStepStarted() {
         Step step = getListener().getLastStep();
         String title = step.getTitle();
@@ -157,16 +165,14 @@ public class LogTests extends EventHandler {
         title = new MetaInfo(title).getTitleWithoutMeta();
         String time = new SimpleDateFormat("hh:mm:ss:SSS").format(step.getStart());
 
-        title = "[" + time + "] " + title;
+        title = "[" + time + "] " + getLevelSpace() + title;
         log.add(title);
     }
 
-    private void logAssert(String message) {
-        String title = message;
-        String time =  new SimpleDateFormat("hh:mm:ss:SSS").format(System.currentTimeMillis());
-
-        title = "[" + time + "] " + title;
-        log.add(title);
+    private String getLevelSpace() {
+        System.out.println("******************************** " + getListener().getLastStep().getName() + ": " + getListener().getStepStorage().get().size());
+        int level = getListener().getStepStorage().get().size() - 2;
+        return StringUtils.repeat("    ", level);
     }
 
     private void logStepFailed() {

@@ -4,7 +4,7 @@
     <groupId>com.qantium</groupId>
     <artifactId>uisteps-allure</artifactId>
     <name>${project.artifactId}</name>
-    <version>4.1.13</version>
+    <version>4.1.14</version>
     <description>Allure extension for uisteps-core</description>
     <packaging>jar</packaging>
 
@@ -67,11 +67,6 @@
             <artifactId>uisteps-core</artifactId>
             <version>${uisteps.core}</version>
         </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -97,11 +92,6 @@
                 <version>2.12</version>
                 <configuration>
                     <argLine>
-                        -Dorg.slf4j.simpleLogger.levelInBrackets=true
-                        -Dorg.slf4j.simpleLogger.showDateTime=false
-                        -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss:SSS
-                        -Dorg.slf4j.simpleLogger.showThreadName=false
-                        -Dorg.slf4j.simpleLogger.showLogName=false
                         -Dfile.encoding=${encoding}
                         -Dsun.jnu.encoding=${encoding}
                     </argLine>
