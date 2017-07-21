@@ -33,6 +33,7 @@ public class TakePageSource extends EventHandler {
         String listenMeta = "";
         String attachSource = "";
         Step lastStep = getListener().getLastStep();
+
         if (lastStep != null && !isEmpty(lastStep.getTitle())) {
             MetaInfo meta = new MetaInfo(lastStep.getTitle());
             listenMeta = meta.get(Meta.LISTEN.toString());

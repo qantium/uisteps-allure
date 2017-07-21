@@ -5,7 +5,7 @@ package com.qantium.uisteps.allure.tests.listeners;
  */
 public enum Meta {
 
-    LISTEN, GROUPS, ATTACH_SCREENSHOT, ATTACH_SOURCE;
+    LISTEN, GROUPS, ATTACH_SCREENSHOT, ATTACH_SOURCE, ATTACH_HAR;
 
     @Override
     public String toString() {

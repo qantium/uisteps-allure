@@ -13,19 +13,19 @@ public class BrowserManager extends com.qantium.uisteps.core.browser.BrowserMana
         setBrowserFactory(new BrowserFactory());
     }
 
-    @Step("Open {0} META[attach.screenshot=false][attach.source=false]")
+    @Step("Open {0} META[attach.screenshot=false][attach.source=false][attach.har=false]")
     @Override
     public IBrowser open(IBrowser browser) {
         return super.open(browser);
     }
 
-    @Step("Switch to browser by index {0} META[attach.screenshot=false][attach.source=false]")
+    @Step("Switch to browser by index {0} META[attach.screenshot=false][attach.source=false][attach.har=false]")
     @Override
     public IBrowser switchToBrowserByIndex(int index) {
         return super.switchToBrowserByIndex(index);
     }
 
-    @Step("Close current browser META[attach.screenshot=false][attach.source=false]")
+    @Step("Close current browser META[attach.screenshot=false][attach.source=false][attach.har=false]")
     @Override
     public void closeCurrentBrowser() {
         super.closeCurrentBrowser();

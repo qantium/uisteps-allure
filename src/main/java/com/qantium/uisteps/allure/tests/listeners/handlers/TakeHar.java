@@ -2,8 +2,11 @@ package com.qantium.uisteps.allure.tests.listeners.handlers;
 
 import com.google.common.io.Files;
 import com.qantium.uisteps.allure.tests.listeners.Event;
+import com.qantium.uisteps.allure.tests.listeners.Meta;
 import com.qantium.uisteps.core.lifecycle.MetaInfo;
 import com.qantium.uisteps.core.screenshots.Screenshot;
+import net.lightbody.bmp.core.har.Har;
+import org.apache.commons.lang3.StringUtils;
 import ru.yandex.qatools.allure.model.Attachment;
 import ru.yandex.qatools.allure.model.Step;
 
@@ -12,63 +15,66 @@ import java.io.IOException;
 import java.util.UUID;
 
 import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE_HOME_DIR;
+import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.HAR_TAKE;
 import static com.qantium.uisteps.allure.tests.listeners.Meta.ATTACH_SCREENSHOT;
 import static com.qantium.uisteps.allure.tests.listeners.Meta.LISTEN;
-import static com.qantium.uisteps.core.properties.UIStepsProperty.SCREENSHOTS_TAKE;
 import static com.qantium.uisteps.core.properties.UIStepsProperty.USER_DIR;
+import static com.qantium.uisteps.core.properties.UIStepsProperty.WEBDRIVER_PROXY;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
- * Created by Anton Solyankin
+ * Created by Solan on 20.07.2017.
  */
-public class TakeScreenshot extends EventHandler {
+public class TakeHar extends EventHandler {
 
     private Step lastStep;
 
-    public TakeScreenshot() {
-        super(SCREENSHOTS_TAKE);
+    public TakeHar() {
+        super(HAR_TAKE);
     }
 
     @Override
     public boolean needsOn(Event event) {
         String listenMeta = "";
-        String attachScreenShot = "";
+        String attachHar = "";
         Step lastStep = getListener().getLastStep();
 
-        if (lastStep != null && isNotEmpty(lastStep.getTitle())) {
+        if (lastStep != null && !isEmpty(lastStep.getTitle())) {
             MetaInfo meta = new MetaInfo(lastStep.getTitle());
-            listenMeta = meta.get(LISTEN.toString());
-            attachScreenShot = meta.get(ATTACH_SCREENSHOT.toString());
+            listenMeta = meta.get(Meta.LISTEN.toString());
+            attachHar = meta.get(Meta.ATTACH_HAR.toString());
         }
         return super.needsOn(event)
+                && isNotEmpty(WEBDRIVER_PROXY.getValue())
                 && (this.lastStep == null || !lastStep.equals(this.lastStep))
                 && !"false".equals(listenMeta)
-                && !"false".equals(attachScreenShot)
+                && !"false".equals(attachHar)
                 && getListener().getTest().hasAnyBrowser()
                 && getListener().getTest().inOpenedBrowser().isAlive();
     }
 
 
     @Override
-    public Screenshot handle(Event event, Object... args) {
+    public Har handle(Event event, Object... args) {
+        Har har = getListener().getTest().getCurrentBrowser().getProxy().getHar();
+
         lastStep = getListener().getLastStep();
 
         UUID uid = UUID.randomUUID();
         String dir = USER_DIR.getValue() + ALLURE_HOME_DIR.getValue();
-        //TODO: inOpenedBrowser().getPhotographer
-        Screenshot screenshot = getListener().getTest().getPhotographer().takeScreenshot();
 
-        File file = new File(dir + "/screenshot-" + uid + ".png");
+        File file = new File(dir + "/har-" + uid + ".har");
 
         try {
             Files.createParentDirs(file);
-            Files.write(screenshot.asByteArray(), file);
+            har.writeTo(file);
         } catch (IOException ex) {
-            throw new RuntimeException("Cannot save screenshot!", ex);
+            throw new RuntimeException("Cannot save har!", ex);
         }
 
-        attach(file, "screenshot", "image/png");
-        return screenshot;
+        attach(file, "har", "text/plain");
+        return har;
     }
 
     private void attach(File file, String title, String type) {
