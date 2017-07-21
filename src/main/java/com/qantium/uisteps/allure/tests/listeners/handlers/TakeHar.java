@@ -4,9 +4,7 @@ import com.google.common.io.Files;
 import com.qantium.uisteps.allure.tests.listeners.Event;
 import com.qantium.uisteps.allure.tests.listeners.Meta;
 import com.qantium.uisteps.core.lifecycle.MetaInfo;
-import com.qantium.uisteps.core.screenshots.Screenshot;
 import net.lightbody.bmp.core.har.Har;
-import org.apache.commons.lang3.StringUtils;
 import ru.yandex.qatools.allure.model.Attachment;
 import ru.yandex.qatools.allure.model.Step;
 
@@ -16,8 +14,6 @@ import java.util.UUID;
 
 import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE_HOME_DIR;
 import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.HAR_TAKE;
-import static com.qantium.uisteps.allure.tests.listeners.Meta.ATTACH_SCREENSHOT;
-import static com.qantium.uisteps.allure.tests.listeners.Meta.LISTEN;
 import static com.qantium.uisteps.core.properties.UIStepsProperty.USER_DIR;
 import static com.qantium.uisteps.core.properties.UIStepsProperty.WEBDRIVER_PROXY;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -48,6 +44,7 @@ public class TakeHar extends EventHandler {
         return super.needsOn(event)
                 && isNotEmpty(WEBDRIVER_PROXY.getValue())
                 && (this.lastStep == null || !lastStep.equals(this.lastStep))
+                && getListener().getTest().getCurrentBrowser().getProxy() != null
                 && !"false".equals(listenMeta)
                 && !"false".equals(attachHar)
                 && getListener().getTest().hasAnyBrowser()
