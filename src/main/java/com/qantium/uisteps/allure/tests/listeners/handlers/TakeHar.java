@@ -44,11 +44,11 @@ public class TakeHar extends EventHandler {
         return super.needsOn(event)
                 && isNotEmpty(WEBDRIVER_PROXY.getValue())
                 && (this.lastStep == null || !lastStep.equals(this.lastStep))
-                && getListener().getTest().getCurrentBrowser().getProxy() != null
                 && !"false".equals(listenMeta)
                 && !"false".equals(attachHar)
                 && getListener().getTest().hasAnyBrowser()
-                && getListener().getTest().inOpenedBrowser().isAlive();
+                && getListener().getTest().inOpenedBrowser().isAlive()
+                && getListener().getTest().getCurrentBrowser().getProxy() != null;
     }
 
 
