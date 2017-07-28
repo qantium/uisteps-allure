@@ -1,6 +1,5 @@
 package com.qantium.uisteps.allure.properties;
 
-import com.qantium.uisteps.core.lifecycle.Execute;
 import com.qantium.uisteps.core.properties.IUIStepsProperty;
 
 /**
@@ -9,9 +8,7 @@ import com.qantium.uisteps.core.properties.IUIStepsProperty;
 public enum AllureUIStepsProperty implements IUIStepsProperty {
 
     ALLURE_HOME_DIR("/target/site/allure-maven-plugin/data"),
-    ALLURE_LOG_ATTACH("true"),
-
-    HAR_TAKE(Execute.FOR_FAILURES.name());
+    ALLURE_LOG_ATTACH("true");
 
     private final String defaultValue;
 

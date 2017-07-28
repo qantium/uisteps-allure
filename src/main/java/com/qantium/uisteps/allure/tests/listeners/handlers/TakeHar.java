@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.util.UUID;
 
 import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.ALLURE_HOME_DIR;
-import static com.qantium.uisteps.allure.properties.AllureUIStepsProperty.HAR_TAKE;
 import static com.qantium.uisteps.core.properties.UIStepsProperty.USER_DIR;
+import static com.qantium.uisteps.core.properties.UIStepsProperty.HAR_TAKE;
 import static com.qantium.uisteps.core.properties.UIStepsProperty.WEBDRIVER_PROXY;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
