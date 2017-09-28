@@ -28,7 +28,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 public class LogTests extends EventHandler {
 
-    private List<String> log = new ArrayList();
+    private List<String> log;
     private Charset UTF_8 = Charset.forName("UTF-8");
     private String dir = USER_DIR.getValue() + ALLURE_HOME_DIR.getValue();
 
@@ -41,6 +41,7 @@ public class LogTests extends EventHandler {
 
         switch (event) {
             case TEST_STARTED:
+                log = new ArrayList();
                 logTest(TEST_STARTED);
                 break;
             case TEST_FINISHED:

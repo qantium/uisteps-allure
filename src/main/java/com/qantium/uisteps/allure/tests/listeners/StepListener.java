@@ -52,7 +52,6 @@ public class StepListener extends LifecycleListener {
             testSuite = ((StepListener) listeners.get(0)).getTestSuite();
         }
         listeners.clear();
-
         add(new CatchAssertions());
         add(new TakeScreenshot());
         add(new TakePageSource());
