@@ -14,10 +14,7 @@ import ru.yandex.qatools.allure.storages.TestCaseStorage;
 import ru.yandex.qatools.allure.storages.TestSuiteStorage;
 
 import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.qantium.uisteps.allure.tests.listeners.Event.*;
 
@@ -34,6 +31,7 @@ public class StepListener extends LifecycleListener {
     private BaseTest test;
     private boolean stepIsFailed;
     private Throwable error;
+    private boolean finished;
 
     public StepListener() {
         testCase = getTestStorage().get();
@@ -45,12 +43,30 @@ public class StepListener extends LifecycleListener {
         return this;
     }
 
+    public boolean isFinished() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
+    }
+
     public void init() {
         ListenersNotifier notifier = getNotifier();
+
+//        try {
+//            Field listenersField = notifier.getClass().getDeclaredField("listeners");
+//            listenersField.setAccessible(true);
+//            listenersField.set(notifier, new ArrayList<LifecycleListener>());
+//        } catch (NoSuchFieldException | IllegalAccessException ex) {
+//            throw new IllegalStateException("Cannot set listeners field to notifier", ex);
+//        }
+
         List<LifecycleListener> listeners = notifier.getListeners();
         if (listeners.size() != 0) {
             testSuite = ((StepListener) listeners.get(0)).getTestSuite();
         }
+
         listeners.clear();
         add(new CatchAssertions());
         add(new TakeScreenshot());

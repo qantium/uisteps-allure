@@ -7,6 +7,8 @@ import com.qantium.uisteps.allure.user.User;
 import com.qantium.uisteps.core.screenshots.IPhotographer;
 import com.qantium.uisteps.core.screenshots.Photographer;
 
+import java.util.UUID;
+
 /**
  * Created by Anton Solyankin
  */

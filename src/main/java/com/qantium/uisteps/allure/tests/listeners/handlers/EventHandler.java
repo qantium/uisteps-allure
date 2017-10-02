@@ -7,6 +7,7 @@ import com.qantium.uisteps.core.properties.IUIStepsProperty;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import static com.qantium.uisteps.allure.tests.listeners.Event.*;
 import static java.util.Arrays.asList;
@@ -18,6 +19,7 @@ public abstract class EventHandler {
 
     private final Set<Event> events = new HashSet();
     private StepListener listener;
+
 
     public EventHandler(Event[] events) {
         this.events.addAll(asList(events));
@@ -41,6 +43,7 @@ public abstract class EventHandler {
                     break;
                 case FOR_FAILURES:
                     events.add(ASSERT);
+                    events.add(ASSERT_BROKEN);
                     events.add(STEP_FAILED);
                     break;
                 case TEST_STARTED:

@@ -32,6 +32,11 @@ public class LogTests extends EventHandler {
     private Charset UTF_8 = Charset.forName("UTF-8");
     private String dir = USER_DIR.getValue() + ALLURE_HOME_DIR.getValue();
 
+    @Override
+    public boolean needsOn(Event event) {
+        return !getListener().isFinished() && super.needsOn(event);
+    }
+
     public LogTests() {
         super(new Event[]{TEST_STARTED, TEST_FINISHED, STEP_STARTED, STEP_FAILED});
     }
@@ -48,7 +53,7 @@ public class LogTests extends EventHandler {
                 logTest(TEST_FINISHED);
                 attachLog();
                 writeLog();
-                log = new ArrayList();
+                getListener().setFinished(true);
                 break;
             case STEP_STARTED:
                 logStepStarted();
@@ -61,7 +66,7 @@ public class LogTests extends EventHandler {
     }
 
     private void writeLog() {
-        Logger logger = Logger.getLogger(LogTests.class.getName());
+        Logger logger = Logger.getLogger(LogTests.class.getName() + UUID.randomUUID());
         logger.setUseParentHandlers(false);
         ConsoleHandler ch = new ConsoleHandler();
         ch.setFormatter(new LogFormatter());
