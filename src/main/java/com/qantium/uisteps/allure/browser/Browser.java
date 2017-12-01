@@ -3,6 +3,7 @@ package com.qantium.uisteps.allure.browser;
 import com.qantium.uisteps.allure.storage.Storage;
 import com.qantium.uisteps.core.browser.pages.Page;
 import com.qantium.uisteps.core.browser.pages.UIElement;
+import com.qantium.uisteps.core.browser.pages.UIObject;
 import com.qantium.uisteps.core.browser.pages.elements.*;
 import com.qantium.uisteps.core.browser.pages.elements.Select.Option;
 import com.qantium.uisteps.core.browser.pages.elements.alert.Alert;
@@ -13,6 +14,10 @@ import com.qantium.uisteps.core.screenshots.Ignored;
 import com.qantium.uisteps.core.screenshots.Screenshot;
 import org.openqa.selenium.Keys;
 import ru.yandex.qatools.allure.annotations.Step;
+
+import java.util.Arrays;
+
+import static com.qantium.uisteps.allure.tests.steps.Steps.step;
 
 
 /**
@@ -34,6 +39,13 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
     @Override
     public <T extends Page> T open(T page) {
         return super.open(page);
+    }
+
+    @Step("Open {0}")
+    @Override
+    public <T extends UIObject> T onDisplayed(T uiObject) {
+        return step("On displayed " + uiObject, () ->
+                super.onDisplayed(uiObject));
     }
 
     @Step
@@ -72,6 +84,12 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
     @Override
     public void openNewWindow() {
         super.openNewWindow();
+    }
+
+    @Step
+    @Override
+    public void closeWindow() {
+        super.closeWindow();
     }
 
     @Step
@@ -153,6 +171,12 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
     @Step("Type into \"{0}\" value \"{1}\"")
     public void typeInto(TextField input, Object text) {
         super.typeInto(input, text);
+    }
+
+    @Override
+    public void sendKeys(UIElement element, CharSequence... keysToSend) {
+        step("Send keys to " + Arrays.asList(keysToSend), () ->
+                super.sendKeys(element, keysToSend));
     }
 
     @Override
