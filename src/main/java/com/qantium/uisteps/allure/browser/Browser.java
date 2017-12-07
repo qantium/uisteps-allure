@@ -161,7 +161,7 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
     }
 
     //Elements
-    @Step
+    @Step("Clear \"{0}\"")
     @Override
     public void clear(TextField input) {
         super.clear(input);

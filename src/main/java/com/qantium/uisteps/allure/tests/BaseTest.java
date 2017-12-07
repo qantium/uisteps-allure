@@ -25,7 +25,6 @@ public class BaseTest extends User {
         listener.set(this);
         softAssertion = new SoftAssert(listener);
         hardAssertion = new HardAssert(listener);
-
     }
 
     public IPhotographer getPhotographer() {
