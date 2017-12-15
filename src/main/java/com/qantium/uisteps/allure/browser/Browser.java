@@ -4,8 +4,10 @@ import com.qantium.uisteps.allure.storage.Storage;
 import com.qantium.uisteps.core.browser.pages.Page;
 import com.qantium.uisteps.core.browser.pages.UIElement;
 import com.qantium.uisteps.core.browser.pages.UIObject;
-import com.qantium.uisteps.core.browser.pages.elements.*;
-import com.qantium.uisteps.core.browser.pages.elements.Select.Option;
+import com.qantium.uisteps.core.browser.pages.elements.FileInput;
+import com.qantium.uisteps.core.browser.pages.elements.Select;
+import com.qantium.uisteps.core.browser.pages.elements.TextBlock;
+import com.qantium.uisteps.core.browser.pages.elements.TextField;
 import com.qantium.uisteps.core.browser.pages.elements.alert.Alert;
 import com.qantium.uisteps.core.browser.pages.elements.alert.AuthenticationAlert;
 import com.qantium.uisteps.core.browser.pages.elements.alert.ConfirmAlert;
@@ -374,42 +376,106 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
     }
 
     //Select
-    @Step("Select \"{0}\"")
     @Override
-    public void select(Option option) {
-        super.select(option);
+    public void selectFirstByVisibleValue(Select select, String... values) {
+        step("select in \"" + select + "\" first option by visible value " + Arrays.asList(values), () ->
+                super.selectFirstByVisibleValue(select, values));
     }
 
-    @Step("Deselect ol values from \"{0}\"")
     @Override
-    public void deselectAllValuesFrom(Select select) {
-        super.deselectAllValuesFrom(select);
+    public void selectAllByVisibleValue(Select select, String... values) {
+        step("select in \"" + select + "\" all options by visible value " + Arrays.asList(values), () ->
+                super.selectAllByVisibleValue(select, values));
     }
 
-    @Step("Deselect \"{0}\"")
     @Override
-    public void deselect(Option option) {
-        super.deselect(option);
+    public void selectFirstByValue(Select select, String... values) {
+        step("select in \"" + select + "\" first option by value " + Arrays.asList(values), () ->
+                super.selectFirstByVisibleValue(select, values));
     }
 
-    //Radio button
-    @Step("Select \"{0}\"")
     @Override
-    public boolean select(RadioButton button) {
-        return super.select(button);
+    public void selectAllByValue(Select select, String... values) {
+        step("select in \"" + select + "\" all options by value " + Arrays.asList(values), () ->
+                super.selectAllByValue(select, values));
     }
 
-    //CheckBox
-    @Step("Select \"{0}\"")
     @Override
-    public boolean select(CheckBox checkBox) {
-        return super.select(checkBox);
+    public void selectAll(Select select) {
+        step("select in \"" + select + "\" all options", () ->
+                super.selectAll(select));
     }
 
-    @Step("Deselect \"{0}\"")
     @Override
-    public boolean deselect(CheckBox checkBox) {
-        return super.deselect(checkBox);
+    public void deselectAll(Select select) {
+        step("deselect in \"" + select + "\" all options", () ->
+                super.selectAll(select));
+    }
+
+    default void selectByIndex(Select select, Integer... indexes) {
+        perform(select, () -> {
+            for (int index : indexes) {
+                TextBlock option = select.get(index);
+                if (isNotSelected(option)) option.click();
+            }
+            return null;
+        });
+    }
+
+    default void deselectByIndex(Select select, Integer... indexes) {
+        perform(select, () -> {
+            for (int index : indexes) {
+                TextBlock option = select.get(index);
+                if (isSelected(option)) option.click();
+            }
+            return null;
+        });
+    }
+
+    default void deselectFirstByVisibleValue(Select select, String... values) {
+        perform(select, () -> {
+            for (String value : values)
+                select.stream()
+                        .filter(option -> value.equals(option.getContent()))
+                        .findFirst().ifPresent(option -> {
+                    if (!option.getWrappedElement().isSelected()) option.click();
+                });
+            return null;
+        });
+    }
+
+    default void deselectAllByVisibleValue(Select select, String... values) {
+        perform(select, () -> {
+            for (String value : values)
+                select.stream()
+                        .filter(option -> value.equals(option.getContent()) && option.getWrappedElement().isSelected())
+                        .forEach(option -> option.click());
+            return null;
+        });
+    }
+
+    default void deselectFirstByValue(Select select, String... values) {
+
+        perform(select, () -> {
+            for (String value : values)
+                select.stream()
+                        .filter(option -> value.equals(option.getAttribute("value")))
+                        .findFirst().ifPresent(option -> {
+                    if (!option.getWrappedElement().isSelected()) option.click();
+                });
+            return null;
+        });
+    }
+
+    default void deselectAllByValue(Select select, String... values) {
+        perform(select, () -> {
+            for (String value : values)
+                select.stream()
+                        .filter(option -> value.equals(option.getAttribute("value"))
+                                && option.getWrappedElement().isSelected())
+                        .forEach(option -> option.click());
+            return null;
+        });
     }
 
     //FileInput
