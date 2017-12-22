@@ -4,9 +4,9 @@ import com.qantium.uisteps.allure.storage.Storage;
 import com.qantium.uisteps.core.browser.pages.Page;
 import com.qantium.uisteps.core.browser.pages.UIElement;
 import com.qantium.uisteps.core.browser.pages.UIObject;
+import com.qantium.uisteps.core.browser.pages.elements.CheckBox;
 import com.qantium.uisteps.core.browser.pages.elements.FileInput;
 import com.qantium.uisteps.core.browser.pages.elements.Select;
-import com.qantium.uisteps.core.browser.pages.elements.TextBlock;
 import com.qantium.uisteps.core.browser.pages.elements.TextField;
 import com.qantium.uisteps.core.browser.pages.elements.alert.Alert;
 import com.qantium.uisteps.core.browser.pages.elements.alert.AuthenticationAlert;
@@ -41,13 +41,6 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
     @Override
     public <T extends Page> T open(T page) {
         return super.open(page);
-    }
-
-    @Step("Open {0}")
-    @Override
-    public <T extends UIObject> T onDisplayed(T uiObject) {
-        return step("On displayed " + uiObject, () ->
-                super.onDisplayed(uiObject));
     }
 
     @Step
@@ -160,6 +153,19 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
     @Override
     public void maximizeWindow() {
         super.maximizeWindow();
+    }
+
+    //CheckBox
+    @Step("select \"{0}\"")
+    @Override
+    public boolean select(CheckBox checkBox) {
+        return super.select(checkBox);
+    }
+
+    @Step("Deselect \"{0}\"")
+    @Override
+    public boolean deselect(CheckBox checkBox) {
+        return super.deselect(checkBox);
     }
 
     //Elements
@@ -378,104 +384,74 @@ public class Browser extends com.qantium.uisteps.core.browser.Browser {
     //Select
     @Override
     public void selectFirstByVisibleValue(Select select, String... values) {
-        step("select in \"" + select + "\" first option by visible value " + Arrays.asList(values), () ->
+        step("Select in \"" + select + "\" first option by visible value " + Arrays.asList(values), () ->
                 super.selectFirstByVisibleValue(select, values));
     }
 
     @Override
     public void selectAllByVisibleValue(Select select, String... values) {
-        step("select in \"" + select + "\" all options by visible value " + Arrays.asList(values), () ->
+        step("Select in \"" + select + "\" all options by visible value " + Arrays.asList(values), () ->
                 super.selectAllByVisibleValue(select, values));
     }
 
     @Override
     public void selectFirstByValue(Select select, String... values) {
-        step("select in \"" + select + "\" first option by value " + Arrays.asList(values), () ->
+        step("Select in \"" + select + "\" first option by value " + Arrays.asList(values), () ->
                 super.selectFirstByVisibleValue(select, values));
     }
 
     @Override
     public void selectAllByValue(Select select, String... values) {
-        step("select in \"" + select + "\" all options by value " + Arrays.asList(values), () ->
+        step("Select in \"" + select + "\" all options by value " + Arrays.asList(values), () ->
                 super.selectAllByValue(select, values));
     }
 
     @Override
     public void selectAll(Select select) {
-        step("select in \"" + select + "\" all options", () ->
+        step("Select in \"" + select + "\" all options", () ->
                 super.selectAll(select));
     }
 
     @Override
     public void deselectAll(Select select) {
-        step("deselect in \"" + select + "\" all options", () ->
+        step("Deselect in \"" + select + "\" all options", () ->
                 super.selectAll(select));
     }
 
-    default void selectByIndex(Select select, Integer... indexes) {
-        perform(select, () -> {
-            for (int index : indexes) {
-                TextBlock option = select.get(index);
-                if (isNotSelected(option)) option.click();
-            }
-            return null;
-        });
+    @Override
+    public void selectByIndex(Select select, Integer... indexes) {
+        step("Select in \"" + select + "\" options by indexes " + Arrays.asList(indexes), () ->
+                super.selectByIndex(select, indexes));
     }
 
-    default void deselectByIndex(Select select, Integer... indexes) {
-        perform(select, () -> {
-            for (int index : indexes) {
-                TextBlock option = select.get(index);
-                if (isSelected(option)) option.click();
-            }
-            return null;
-        });
+    @Override
+    public void deselectByIndex(Select select, Integer... indexes) {
+        step("Deselect in \"" + select + "\" options by indexes " + Arrays.asList(indexes), () ->
+                super.deselectByIndex(select, indexes));
     }
 
-    default void deselectFirstByVisibleValue(Select select, String... values) {
-        perform(select, () -> {
-            for (String value : values)
-                select.stream()
-                        .filter(option -> value.equals(option.getContent()))
-                        .findFirst().ifPresent(option -> {
-                    if (!option.getWrappedElement().isSelected()) option.click();
-                });
-            return null;
-        });
+    @Override
+    public void deselectFirstByVisibleValue(Select select, String... values) {
+        step("Deselect in \"" + select + "\" first option by visible value " + Arrays.asList(values), () ->
+                super.deselectFirstByVisibleValue(select, values));
     }
 
-    default void deselectAllByVisibleValue(Select select, String... values) {
-        perform(select, () -> {
-            for (String value : values)
-                select.stream()
-                        .filter(option -> value.equals(option.getContent()) && option.getWrappedElement().isSelected())
-                        .forEach(option -> option.click());
-            return null;
-        });
+    @Override
+    public void deselectAllByVisibleValue(Select select, String... values) {
+        step("Deselect in \"" + select + "\" all options by visible value " + Arrays.asList(values), () ->
+                super.deselectAllByVisibleValue(select, values));
     }
 
-    default void deselectFirstByValue(Select select, String... values) {
-
-        perform(select, () -> {
-            for (String value : values)
-                select.stream()
-                        .filter(option -> value.equals(option.getAttribute("value")))
-                        .findFirst().ifPresent(option -> {
-                    if (!option.getWrappedElement().isSelected()) option.click();
-                });
-            return null;
-        });
+    @Override
+    public void deselectFirstByValue(Select select, String... values) {
+        step("Deselect in \"" + select + "\" first option by  value " + Arrays.asList(values), () ->
+                super.deselectFirstByValue(select, values));
     }
 
-    default void deselectAllByValue(Select select, String... values) {
-        perform(select, () -> {
-            for (String value : values)
-                select.stream()
-                        .filter(option -> value.equals(option.getAttribute("value"))
-                                && option.getWrappedElement().isSelected())
-                        .forEach(option -> option.click());
-            return null;
-        });
+    @Override
+    public void deselectAllByValue(Select select, String... values) {
+        step("Deselect in \"" + select + "\" all options  by  value " + Arrays.asList(values), () ->
+                super.deselectAllByValue(select, values));
     }
 
     //FileInput

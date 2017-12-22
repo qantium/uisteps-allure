@@ -3,6 +3,7 @@ package com.qantium.uisteps.allure.user;
 import com.qantium.uisteps.allure.browser.BrowserManager;
 import com.qantium.uisteps.allure.storage.Storage;
 
+
 /**
  * Created by Anton Solyankin
  */
