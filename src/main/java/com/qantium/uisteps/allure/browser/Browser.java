@@ -3,7 +3,6 @@ package com.qantium.uisteps.allure.browser;
 import com.qantium.uisteps.allure.storage.Storage;
 import com.qantium.uisteps.core.browser.pages.Page;
 import com.qantium.uisteps.core.browser.pages.UIElement;
-import com.qantium.uisteps.core.browser.pages.UIObject;
 import com.qantium.uisteps.core.browser.pages.elements.CheckBox;
 import com.qantium.uisteps.core.browser.pages.elements.FileInput;
 import com.qantium.uisteps.core.browser.pages.elements.Select;
