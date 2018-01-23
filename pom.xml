@@ -4,7 +4,7 @@
     <groupId>com.qantium</groupId>
     <artifactId>uisteps-allure</artifactId>
     <name>${project.artifactId}</name>
-    <version>5.0.5</version>
+    <version>5.0.6</version>
     <description>Allure extension for uisteps-core</description>
     <packaging>jar</packaging>
 
@@ -16,7 +16,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <allure.version>1.5.0.RC2</allure.version>
-        <uisteps.core>5.0.5</uisteps.core>
+        <uisteps.core>5.0.6</uisteps.core>
     </properties>
 
     <distributionManagement>
